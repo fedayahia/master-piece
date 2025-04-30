@@ -1,0 +1,119 @@
+.register-section {
+    width: 100%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, .9);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.register-section h2 {
+    margin-bottom: 30px;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    text-align: left;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+input {
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.but-register {
+    background-color: rgba(255, 72, 128, 0.9);
+    color: white;
+    padding: 15px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.but-register:hover {
+    background-color: #0056b3;
+}
+
+.register-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+    color: rgba(255, 72, 128, 0.9);
+}
+.text-danger {
+    color: #e74c3c; /* أحمر جميل */
+    font-size: 0.875rem; /* حجم خط صغير */
+    margin-top: 4px;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: 500;
+}
+input.is-invalid {
+    border: 1px solid #e74c3c;
+    background-color: #fff5f5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .register-section {
+        padding: 15px;
+        max-width: 90%;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    input {
+        padding: 8px;
+        font-size: 0.95rem;
+    }
+
+    button.but-register {
+        padding: 10px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .register-section {
+        padding: 10px;
+        max-width: 95%;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+
+    input {
+        padding: 6px;
+        font-size: 0.9rem;
+    }
+
+    button.but-register {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+}
