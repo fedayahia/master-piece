@@ -4,7 +4,6 @@
 
 @section('content')
 <style>
-    /* ستايل مشابه لعرض الدورات لكن مع بعض التعديلات */
     .session-item {
         transition: all 0.3s;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);

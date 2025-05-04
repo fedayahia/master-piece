@@ -78,16 +78,15 @@
 @push('styles')
 <style>
     :root {
-        --primary: #393D72;  /* اللون الأساسي */
-        --secondary: rgba(254, 56, 115, 0.3);  /* اللون الثانوي */
-        --accent: #1A1C2E;  /* لون التمييز */
-        --dark: #ff2f6e;  /* اللون الداكن */
-        --light: #F8F9FA;  /* اللون الفاتح */
+        --primary: #393D72;  
+        --secondary: rgba(254, 56, 115, 0.3);  
+        --accent: #1A1C2E; 
+        --dark: #ff2f6e;  
+        --light: #F8F9FA;  
     }
 
-    /* الخلفية العامة */
     .container {
-        background-color: white;  /* خلفية بيضاء */
+        background-color: white;  
         padding: 1.5rem;
         border-radius: 10px;
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
@@ -95,47 +94,41 @@
         max-width: 100%;
     }
 
-    /* عناوين الصفحة */
     .section-header h1 {
-        color: var(--primary);  /* نفس لون عناوين الكورسات */
+        color: var(--primary);
         font-weight: 600;
         font-size: 1.5rem;
     }
 
-    /* الجدول */
     .table thead {
-        background-color: var(--primary);  /* رأس الجدول بنفس لون الكورسات */
-        color: white;  /* نص أبيض */
+        background-color: var(--primary);  
+        color: white;  
     }
 
-    /* الأزرار */
     .btn-primary {
-        background-color: var(--primary);  /* زر أساسي بنفس اللون */
+        background-color: var(--primary);  
         color: white;
     }
 
-    /* الحالات (Badges) */
     .badge-success {
-        background-color: #28a745;  /* نجاح (أخضر) */
+        background-color: #28a745;  
     }
     .badge-secondary {
-        background-color: #6c757d;  /* ثانوي (رمادي) */
+        background-color: #6c757d;  
     }
 
-    /* أزرار الإجراءات */
     .btn-show {
-        background-color: var(--primary);  /* عرض - نفس لون القاعدة */
+        background-color: var(--primary);  
     }
     .btn-edit {
-        background-color: #17a2b8;  /* تعديل - أزرق */
+        background-color: #17a2b8;  
     }
     .btn-delete {
-        background-color: var( --dark);  /* حذف - وردي غامق */
+        background-color: var( --dark);  
     }
 
-    /* حالة عدم وجود بيانات */
     .empty-state {
-        color: #6c757d;  /* رمادي متوسط */
+        color: #6c757d;  
     }
 </style>
 @endpush

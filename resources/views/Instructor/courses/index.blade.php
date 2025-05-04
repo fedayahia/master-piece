@@ -4,24 +4,23 @@
 <style>
     /* Main Container */
     select {
-        display: block; /* يجعل الـ select عنصرًا متاحًا بالكامل داخل الحاوية */
-        width: 100%; /* يأخذ عرض الحاوية بالكامل */
-        padding: 10px; /* إضافة حواف داخلية */
-        font-size: 1rem; /* حجم الخط */
-        border: 1px solid #ccc; /* حافة */
-        border-radius: 5px; /* حواف دائرية */
-        background-color: #fff; /* خلفية بيضاء */
+        display: block;
+        width: 100%; 
+        padding: 10px; 
+        font-size: 1rem; 
+        border: 1px solid #ccc; 
+        border-radius: 5px; 
+        background-color: #fff; 
     }
 
-    /* تحسين الـ form-control إذا كانت تؤثر على المظهر */
     .form-control {
-        padding: 0; /* إزالة الحواف الداخلية الزائدة */
-        width: 100%; /* التأكد من أن الـ select يشغل المساحة بالكامل */
-        font-size: 1rem; /* حجم الخط */
-        border: 1px solid #ccc; /* حافة رقيقة */
-        border-radius: 5px; /* حواف دائرية */
-        background-color: #fff; /* خلفية بيضاء */
-        color: #333; /* لون النص */
+        padding: 0; 
+        width: 100%; 
+        font-size: 1rem; 
+        border: 1px solid #ccc; 
+        border-radius: 5px; 
+        background-color: #fff; 
+        color: #333; 
     }
     
     .container {

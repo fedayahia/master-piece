@@ -727,10 +727,8 @@
                             <div class="ms-4">
                                 <h4 class="text-dark">{{ $review->user->name }}</h4>
                                 
-                                {{-- اسم الكورس بلون كحلي --}}
                                 <p class="m-0 pb-3" style="color: #001f3f;">{{ $review->course->title ?? 'Unknown Course' }}</p>
 
-                                {{-- النجوم حسب التقييم --}}
                                 <div class="d-flex pe-5">
                                     @for ($i = 0; $i < $review->rating; $i++)
                                         <i class="fas fa-star text-primary"></i>
@@ -742,7 +740,6 @@
                             </div>
                         </div>
 
-                        {{-- التعليق بلون كحلي --}}
                         <div class="border-top border-primary mt-4 pt-3">
                             <p class="mb-0" style="color: #001f3f;">{{ $review->comment }}</p>
                         </div>

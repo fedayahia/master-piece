@@ -59,7 +59,6 @@
                     <h4 class="mb_10">Billing Details</h4>
                     <div>Name: {{ session()->get('billing_name') }}</div>
                     <div>Email: {{ session()->get('billing_email') }}</div>
-                    <!-- باقي بيانات الفاتورة -->
                 </div>
             </div>
 

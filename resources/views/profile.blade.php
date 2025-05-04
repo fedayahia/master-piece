@@ -38,7 +38,7 @@
                             @php
                                 $title = $item->title ?? 'No Title';
                                 $status = $item->status ?? 'not_enrolled';
-                                $type = $item->type ?? 'Unknown'; // هذا هو الـ type الذي تم تحديده في الـ Controller
+                                $type = $item->type ?? 'Unknown';             
                             @endphp
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between align-items-center">

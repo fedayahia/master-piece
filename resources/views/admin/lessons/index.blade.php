@@ -7,7 +7,6 @@
         <h1>Manage Lessons</h1>
         <a href="{{ route('admin.lessons.create') }}" class="btn btn-primary mb-3">Add New Lesson</a>
 
-        {{-- عرض التنبيه للنجاح --}}
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: fixed; top: 10px; right: 10px; z-index: 9999; width: 300px;">
                 {{ session('success') }}

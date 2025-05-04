@@ -52,15 +52,12 @@ use App\Http\Controllers\Instructor\ProfileController as InstructorProfileContro
 
 
 // Private Sessions Routes
-// routes/web.php
 
 
 Route::get('/instructor/dashboard', [InstructorDashboardController::class, 'showDashboard'])->name('instructor.dashboard');
 
-// عرض صفحة الجلسات الخاصة
 Route::get('/private-sessions', [PrivateSessionController::class, 'index'])->name('private-sessions.index');
 
-// عرض نموذج حجز جلسة معينة
 Route::get('/private-sessions/{sessionId}/book', [PrivateSessionController::class, 'showBookingForm'])->name('private-sessions.book');
 
 Route::post('/private-sessions/store-time', [PrivateSessionController::class, 'storeSelectedTime'])
@@ -70,18 +67,13 @@ Route::post('/private-sessions/store-time', [PrivateSessionController::class, 's
     Route::post('/payment', [PrivateSessionController::class, 'processPayment'])->name('private-sessions.process-payment');
     Route::get('/confirmation', [PrivateSessionController::class, 'confirmation'])->name('private-sessions.confirmation');
 
-
-// لعرض صفحة الحجز
-Route::get('/private-sessions/{session}/book', [PrivateSessionController::class, 'showBookingForm'])
+    Route::get('/private-sessions/{session}/book', [PrivateSessionController::class, 'showBookingForm'])
      ->name('private-sessions.book');
 
-
-
-// لعرض تفاصيل الجلسة
 Route::get('/private-sessions/{session}', [PrivateSessionController::class, 'show'])
      ->name('private-sessions.show');
 
-// المسارات العامة
+//FRONT
 Route::get('/', [UserControllerMain::class, 'team'])->name('home');
 Route::get('/about', function () { return view('about'); })->name('about');
 Route::get('/service', function () { return view('service'); })->name('service');
@@ -97,15 +89,14 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact.index
 Route::resource('live_sessions', LiveSessionController::class);
 Route::post('/live-sessions/{id}/join', [LiveSessionController::class, 'join'])->name('live_sessions.join');
 
-
-// المسارات الخاصة بالتسجيل والدخول
+//REGISTER & LOGIN
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.form');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// المسارات الخاصة بالـ Admin
+//ADMIN
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
@@ -113,22 +104,16 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('private-sessions', AdminPrivateSessionController::class);
     Route::get('events', [AdminEventController::class, 'index'])->name('events.index');
 
-    // مسار عرض صفحة إنشاء حدث جديد
     Route::get('events/create', [AdminEventController::class, 'create'])->name('events.create');
 
-    // مسار تخزين حدث جديد
     Route::post('events', [AdminEventController::class, 'store'])->name('events.store');
 
-    // مسار عرض تفاصيل الحدث
     Route::get('events/{event}', [AdminEventController::class, 'show'])->name('events.show');
 
-    // مسار عرض صفحة تعديل الحدث
     Route::get('events/{event}/edit', [AdminEventController::class, 'edit'])->name('events.edit');
 
-    // مسار تحديث الحدث
     Route::put('events/{event}', [AdminEventController::class, 'update'])->name('events.update');
 
-    // مسار حذف الحدث
     Route::delete('events/{event}', [AdminEventController::class, 'destroy'])->name('events.destroy');
     Route::get('/reviews', [App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('reviews.index');
     Route::delete('/reviews/{id}', [App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('reviews.destroy');
@@ -145,7 +130,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 });
 
-// المسارات الخاصة بالـ Instructor
+// Instructor
 Route::prefix('instructor')->middleware(['auth', 'role:instructor'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('instructor.profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('instructor.profile.edit');
@@ -182,22 +167,16 @@ Route::put('/courses/{id}', [InstructorCourseController::class, 'update'])->name
 Route::delete('/courses/{id}', [InstructorCourseController::class, 'destroy'])->name('instructor.courses.destroy');
     Route::get('course_sessions', [InstructorCourseSessionController::class, 'index'])->name('instructor.course_sessions.index');
     
-    // عرض نموذج إنشاء جلسة دورة تدريبية جديدة
     Route::get('course_sessions/create', [InstructorCourseSessionController::class, 'create'])->name('instructor.course_sessions.create');
     
-    // تخزين جلسة دورة تدريبية جديدة
     Route::post('course_sessions', [InstructorCourseSessionController::class, 'store'])->name('instructor.course_sessions.store');
     
-    // عرض تفاصيل جلسة الدورة التدريبية
     Route::get('course_sessions/{course_session}', [InstructorCourseSessionController::class, 'show'])->name('instructor.course_sessions.show');
     
-    // عرض نموذج تعديل جلسة الدورة التدريبية
     Route::get('course_sessions/{course_session}/edit', [InstructorCourseSessionController::class, 'edit'])->name('instructor.course_sessions.edit');
     
-    // تحديث جلسة الدورة التدريبية
     Route::put('course_sessions/{course_session}', [InstructorCourseSessionController::class, 'update'])->name('instructor.course_sessions.update');
     
-    // حذف جلسة دورة تدريبية
 
 
     Route::delete('course_sessions/{course_session}', [InstructorCourseSessionController::class, 'destroy'])->name('instructor.course_sessions.destroy');
@@ -214,7 +193,7 @@ Route::middleware('auth')->prefix('instructor')->name('instructor.')->group(func
 
 
 
-// المسارات الخاصة بالـ User
+// User
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [UserControllerMain::class, 'show'])->name('user.profile');
     Route::get('/profile/edit', [UserControllerMain::class, 'edit'])->name('user.edit');
@@ -222,11 +201,11 @@ Route::middleware('auth')->group(function () {
 });
 
 
-// المسارات الخاصة بالـ Reviews
+// Reviews
 
 Route::middleware('auth')->group(function () {
-    Route::post('/reviews/store', [UserReviewController::class, 'store'])->name('reviews.store');  // إرسال التقييم
-    Route::get('/reviews/{course}', [UserReviewController::class, 'show'])->name('reviews.show');  // عرض التقييمات الخاصة بالدورة
+    Route::post('/reviews/store', [UserReviewController::class, 'store'])->name('reviews.store');  
+    Route::get('/reviews/{course}', [UserReviewController::class, 'show'])->name('reviews.show');  
 });
 
 // المسارات الخاصة بالـ Bookings
@@ -258,12 +237,10 @@ Route::middleware(['auth'])->group(function () {
     
     // Checkout Process
     Route::prefix('checkout')->group(function () {
-        // في tinker أو في route مؤقت
 Coupon::whereNotNull('applicable_id')->update(['applicable_type' => 'App\Models\Course']);
         // Billing
   
 
-// استبدل التعريفين الموجودين بهذا:
 Route::get('/checkout/billing', [CheckoutController::class, 'billing'])
      ->name('checkout.billing');
                         // Route::get('/checkout/billing/{type}/{id}', [CheckoutController::class, 'billing'])->name('checkout.billing');
@@ -281,7 +258,7 @@ Route::post('/payment/stripe', [CheckoutController::class, 'handleStripe'])
     });
 });
 
- // روابط الكوبونات
+ // COUPON
 Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])
 ->middleware('auth')
 ->name('checkout.apply-coupon');
