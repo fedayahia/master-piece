@@ -203,7 +203,7 @@
 
             <div class="detail-item">
                 <span class="detail-label">Amount:</span>
-                <span class="detail-value">${{ number_format($payment->amount, 2) }}</span>
+                <span class="detail-value">JOD{{ number_format($payment->amount, 2) }}</span>
             </div>
 
             <div class="detail-item">

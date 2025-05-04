@@ -19,7 +19,7 @@ return new class extends Migration
                 $table->text('description')->nullable();
                 $table->dateTime('start_date');
                 $table->dateTime('end_date');
-                $table->integer('duration'); // بالدقائق مثلاً
+                $table->integer('duration'); 
                 $table->enum('session_mode', ['online', 'offline']);
                 $table->integer('max_seats')->default(30);
                 $table->timestamps();

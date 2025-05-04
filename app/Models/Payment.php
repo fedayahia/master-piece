@@ -37,13 +37,11 @@ class Payment extends Model
     {
         parent::boot();
 
-        // تعيين الخرائط المختصرة
         Relation::morphMap([
             'Course' => \App\Models\Course::class,
             'PrivateSession' => \App\Models\PrivateSession::class,
         ]);
     }
-    // علاقة BelongsTo مع المستخدم
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -55,7 +53,6 @@ class Payment extends Model
         return $this->morphTo();
     }
     
-  // أضف هذا إلى الحقول القابلة للتطبيق
 protected $appends = ['item_name', 'item_type'];
 
 public function getItemNameAttribute()
@@ -76,7 +73,6 @@ public function getItemTypeAttribute()
         : 'Private Session';
 }
 
-    // علاقة BelongsTo مع جدول الحجوزات
     public function booking()
     {
         return $this->belongsTo(Booking::class);

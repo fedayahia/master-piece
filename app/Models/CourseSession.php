@@ -9,7 +9,6 @@ class CourseSession extends Model
 {
     use HasFactory;
 
-    // تحديد الحقول القابلة للتحديث
     protected $fillable = [
         'course_id',
         'user_id',
@@ -22,7 +21,6 @@ class CourseSession extends Model
         'max_seats',
     ];
 
-    // علاقة مع الكورس
     public function course()
     {
         return $this->belongsTo(Course::class);
@@ -34,7 +32,6 @@ class CourseSession extends Model
     }
     
     
-    // إذا كان لديك تواريخ إنشاء وتحديث
     public $timestamps = true;
 
 public function bookings(): MorphMany

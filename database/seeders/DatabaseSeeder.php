@@ -14,7 +14,7 @@ use App\Models\Attendance;
 use App\Models\Payment;
 use App\Models\Review;
 use App\Models\PrivateSession;
-use App\Models\Event;  // استيراد موديل الـ Event
+use App\Models\Event;  
 use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         DB::table('courses')->truncate();
         DB::table('users')->truncate();
         DB::table('private_sessions')->truncate();
-        DB::table('events')->truncate();  // إضافة الترايك لأحداث الـ Events
+        DB::table('events')->truncate();  
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1');
 

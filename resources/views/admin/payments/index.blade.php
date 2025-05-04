@@ -301,7 +301,7 @@
                 @foreach($payments as $payment)
                     <tr>
                         <td>{{ $payment->id }}</td>
-                        <td>${{ number_format($payment->amount, 2) }}</td>
+                        <td>JOD{{ number_format($payment->amount, 2) }}</td>
                         <td>{{ ucfirst($payment->method) }}</td>
                         <td>
                             <span class="badge badge-{{ $payment->status }}">

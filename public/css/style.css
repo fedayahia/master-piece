@@ -122,21 +122,19 @@ h6,
     color: var(--bs-primary);
 } */
 
-/* لتغيير لون الخلفية والنص عند تفعيل العنصر */
+
 .active {
-    color: #fff !important;     /* لون النص */
+    color: #fff !important;   
     font-weight: bold;
     border-radius: 8px;
 }
 
-/* مثال إضافي لتخصيص الروابط داخل قائمة التنقل */
 .nav-link.active,
 .nav-item.active > .nav-link {
     color: rgba(255, 72, 128, 0.9) !important;
 
 }
 
-/* تخصيص للأزرار النشطة */
 .btn.active {
     background-color: #0d6efd;
     border-color: #0a58ca;
@@ -1016,7 +1014,6 @@ h6,
     }
 }
 
-/* في ملف الـ CSS الخاص بك */
 #payment-success-modal {
     display: none;
     position: fixed;

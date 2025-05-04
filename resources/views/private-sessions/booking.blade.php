@@ -26,7 +26,7 @@
                         </p>
                     </div>
                     <div class="ms-auto bg-light-success p-2 rounded text-center">
-                        <span class="text-success fw-bold d-block">{{ number_format($session->price, 2) }} JD</span>
+                        <span class="text-success fw-bold d-block">{{ number_format($session->price, 2) }} JOD</span>
                         <small class="text-muted">Per session</small>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                         </div>
                         <div>
                             <h6 class="mb-0 fw-semibold">Duration</h6>
-                            <p class="text-muted mb-0">{{ $session->duration }} minutes</p>
+                            <p class="text-muted mb-0">{{ $session->duration }} hours</p>
                         </div>
                     </div>
                     
@@ -60,7 +60,14 @@
                     <input type="hidden" name="session_id" value="{{ $session->id }}">
                     <input type="hidden" name="instructor_id" value="{{ $session->instructor_id }}">
                     <input type="hidden" name="price" value="{{ $session->price }}">
-                    
+
+                    <!-- Display Alert if Booking is Duplicate -->
+                    @if(session('error'))
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i> {{ session('error') }}
+                    </div>
+                    @endif
+
                     <div class="p-4">
                         <h5 class="mb-3 fw-semibold text-primary">
                             <i class="far fa-calendar-alt me-2"></i> Choose a Time Slot

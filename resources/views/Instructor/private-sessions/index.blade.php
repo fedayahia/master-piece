@@ -29,7 +29,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $session->title }}</td>
                             <td>{{ $session->duration }} mins</td>
-                            <td>${{ number_format($session->price, 2) }}</td>
+                            <td>JOD{{ number_format($session->price, 2) }}</td>
                             <td>
                                 <span class="badge badge-{{ $session->is_active ? 'success' : 'secondary' }}">
                                     {{ $session->is_active ? 'Active' : 'Inactive' }}

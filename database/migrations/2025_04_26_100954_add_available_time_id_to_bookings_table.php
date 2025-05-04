@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('bookings', function (Blueprint $table) {
-            $table->unsignedBigInteger('available_time_id')->nullable(); // إضافة الحقل الجديد
+            $table->unsignedBigInteger('available_time_id')->nullable(); 
             
             $table->foreign('available_time_id')->references('id')->on('available_times')->onDelete('set null');
         });

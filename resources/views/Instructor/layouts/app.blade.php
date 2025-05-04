@@ -364,12 +364,13 @@
                     <i class="fas fa-star"></i> Course Reviews
                 </a>
             </li>
-<li class="nav-item {{ request()->routeIs('instructor.parents.*') ? 'active' : '' }}">
-    <a class="nav-link" href="{{ route('instructor.parents.index') }}">
-        <i class="fas fa-user-friends me-2"></i>
-        <span>Parents </span>
-    </a>
-</li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('instructor.parents.*') ? 'active' : '' }}" href="{{ route('instructor.parents.index') }}">
+                    <i class="fas fa-user-friends me-2"></i>
+                    <span>Parents</span>
+                </a>
+            </li>
+            
             {{-- <li class="nav-item">
                 <a class="nav-link text-white {{ request()->routeIs('instructor.bookings.*') ? 'active' : '' }}" href="{{ route('instructor.bookings.index') }}">
                     <i class="fas fa-calendar-check"></i> My Bookings

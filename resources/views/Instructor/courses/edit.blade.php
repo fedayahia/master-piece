@@ -233,7 +233,7 @@
                 <div class="form-group">
                     <label for="price">Price *</label>
                     <div class="input-group">
-                        <span class="input-group-text">$</span>
+                        <span class="input-group-text">JOD</span>
                         <input type="number" name="price" id="price" class="form-control @error('price') is-invalid @enderror" 
                                value="{{ old('price', $course->price) }}" step="0.01" min="0" required>
                     </div>

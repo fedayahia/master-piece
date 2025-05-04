@@ -280,7 +280,7 @@
                             <span class="duration-badge">{{ $session->duration }} mins</span>
                         </td>
                         <td data-label="Price">
-                            <span class="price-badge">${{ number_format($session->price, 2) }}</span>
+                            <span class="price-badge">JOD{{ number_format($session->price, 2) }}</span>
                         </td>
                         <td data-label="Description">
                             <div class="description-text">

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->dateTime('end_time')->nullable();
             $table->string('meeting_link');
             $table->integer('duration')->nullable();
-            $table->string('platform')->default('Zoom'); // Zoom, Google Meet, etc.
+            $table->string('platform')->default('Zoom'); 
             $table->boolean('is_active')->default(true);
             $table->timestamp('scheduled_at')->nullable();
             $table->timestamps();

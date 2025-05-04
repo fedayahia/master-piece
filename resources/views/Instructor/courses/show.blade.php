@@ -167,7 +167,7 @@
             
             <div class="detail-item">
                 <span class="detail-label">Price:</span>
-                <span class="detail-value">${{ number_format($course->price, 2) }}</span>
+                <span class="detail-value">JOD{{ number_format($course->price, 2) }}</span>
             </div>
             
             <div class="detail-item">

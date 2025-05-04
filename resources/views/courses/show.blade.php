@@ -1,7 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-
 <style>
     :root {
         --primary: #6c5ce7;
@@ -36,7 +35,6 @@
     
     /* Hero Section */
     .course-hero {
-        /* background: var(--accent); */
         border-radius: 16px;
         box-shadow: 0 10px 30px rgba(108, 92, 231, 0.3);
         overflow: hidden;
@@ -141,6 +139,43 @@
         padding: 0.5rem 1rem;
         border-radius: 50px;
     }
+
+    /* Rating Stars */
+    .rating-input.ltr-stars {
+        direction: ltr;
+        display: inline-flex;
+        flex-direction: row-reverse;
+        gap: 5px;
+    }
+
+    .rating-input.ltr-stars input[type="radio"] {
+        display: none;
+    }
+
+    .rating-input.ltr-stars label {
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: #ddd;
+        transition: color 0.2s;
+    }
+
+    .rating-input.ltr-stars input[type="radio"]:checked ~ label {
+        color: #ddd;
+    }
+
+    .rating-input.ltr-stars input[type="radio"]:checked + label,
+    .rating-input.ltr-stars input[type="radio"]:checked ~ label ~ label {
+        color: #ffc107;
+    }
+
+    .rating-input.ltr-stars label:hover,
+    .rating-input.ltr-stars label:hover ~ label {
+        color: #ffc107;
+    }
+
+    .ltr-stars {
+        font-size: 1.2rem;
+    }
     
     /* Responsive Adjustments */
     @media (max-width: 768px) {
@@ -210,14 +245,13 @@
                     @endphp
 
                     @if ($course->seats_available <= 0)
-                        <div class="alert alert-warning d-flex align-items-center gap-2" role="alert" style="width: 300PX">
+                        <div class="alert alert-warning d-flex align-items-center gap-2" role="alert" style="width: 300px">
                             <i class="fas fa-exclamation-triangle"></i>
                             <div><strong>Sorry!</strong> All seats are booked.</div>
                         </div>
                     @elseif ($userBooking)
-                        <div class="alert alert-info d-flex flex-column gap-1" role="alert" style="width: 400PX">
+                        <div class="alert alert-info d-flex flex-column gap-1" role="alert" style="width: 400px">
                             <div><i class="fas fa-info-circle me-1"></i> <strong>Note:</strong> You already booked this course.</div>
-                            {{-- <div><i class="fas fa-receipt me-1"></i> <strong>Booking Code:</strong> {{ $userBooking->seat_number }}</div> --}}
                             <div><i class="fas fa-calendar-check me-1"></i> <strong>Booking Date:</strong> {{ \Carbon\Carbon::parse($userBooking->booking_date)->format('F j, Y h:i A') }}</div>
                         </div>
                     @else
@@ -234,14 +268,11 @@
                         <i class="fas fa-sign-in-alt me-2"></i> Login to Book
                     </a>
                 @endauth
-
             </div>
         </div>
     </div>
 
-
-
-    <!-- Course Content -->
+    <!-- Course Description -->
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-white">
             <h4 class="mb-0 section-header">
@@ -287,49 +318,167 @@
         </div>
         <div class="card-body">
             @foreach($course->sessions as $session)
-            @php
-                $seatsLeft = $session->max_seats - ($session->bookings_count ?? 0);
-            @endphp
-            <div class="session-card p-4">
-                <div class="d-flex justify-content-between align-items-start flex-wrap">
-                    <div class="flex-grow-1">
-                        <h5 class="fw-bold mb-2">Session {{ $loop->iteration }}: {{ $session->title }}</h5>
-        
-                        {{-- وصف الجلسة --}}
-                        @if($session->description)
-                            <p class="text-muted mb-3">{{ $session->description }}</p>
-                        @endif
-        
-                        <ul class="list-unstyled mb-3 text-muted">
-                            <li class="mb-2">
-                                <i class="fas fa-calendar-day me-2"></i>
-                                {{ \Carbon\Carbon::parse($session->start_date)->format('F j, Y') }} -
-                                {{ \Carbon\Carbon::parse($session->end_date)->format('F j, Y') }}
-                            </li>
-                            <li class="mb-2">
-                                <i class="fas fa-clock me-2"></i>
-                                Duration: {{ $session->duration }} hours
-                            </li>
-                            <li class="mb-2">
-                                <i class="fas fa-signal me-2"></i>
-                                Mode: {{ ucfirst($session->session_mode) }}
-                            </li>
-                            <li class="mb-2">
-                                <i class="fas fa-chair me-2"></i>
-                                Total Seats: {{ $session->max_seats }}
-                            </li>
-                        </ul>
-                        
-        
-                        
+                @php
+                    $seatsLeft = $session->max_seats - ($session->bookings_count ?? 0);
+                @endphp
+                <div class="session-card p-4">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap">
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-2">Session {{ $loop->iteration }}: {{ $session->title }}</h5>
+            
+                            @if($session->description)
+                                <p class="text-muted mb-3">{{ $session->description }}</p>
+                            @endif
+            
+                            <ul class="list-unstyled mb-3 text-muted">
+                                <li class="mb-2">
+                                    <i class="fas fa-calendar-day me-2"></i>
+                                    {{ \Carbon\Carbon::parse($session->start_date)->format('F j, Y') }} -
+                                    {{ \Carbon\Carbon::parse($session->end_date)->format('F j, Y') }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-clock me-2"></i>
+                                    Duration: {{ $session->duration }} hours
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-signal me-2"></i>
+                                    Mode: {{ ucfirst($session->session_mode) }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-chair me-2"></i>
+                                    Total Seats: {{ $session->max_seats }}
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
-        
-        
+            @endforeach
         </div>
     </div>
-</div>
 
+    <!-- Reviews Section -->
+    @auth
+    <div class="card shadow-sm mt-4" id="reviews-section">
+        <div class="card-header bg-white">
+            <h4 class="mb-0"><i class="fas fa-star me-2 text-primary"></i> Course Reviews</h4>
+        </div>
+        <div class="card-body">
+            @php
+                $hasBooking = \App\Models\Booking::where('user_id', auth()->id())
+                    ->where('booking_for_type', 'course')
+                    ->where('booking_for_id', $course->id)
+                    ->exists();
+
+                $courseEnded = \Carbon\Carbon::parse(
+                    optional($course->sessions->sortByDesc('end_date')->first())->end_date
+                )->isPast();
+
+                $alreadyReviewed = auth()->user()->reviews()->where('course_id', $course->id)->exists();
+            @endphp
+
+            @if($hasBooking && $courseEnded && !$alreadyReviewed)
+                <div class="mb-4 p-3 border rounded">
+                    <h5>Add Your Review</h5>
+                    <form action="{{ route('reviews.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="course_id" value="{{ $course->id }}">
+
+                        <!-- Rating Stars (Right to Left) -->
+                        <div class="mb-3">
+                            <label class="form-label">Rating</label>
+                            <div class="rating-input rtl-stars">
+                                @for($i = 5; $i >= 1; $i--)
+                                    <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" {{ old('rating') == $i ? 'checked' : '' }}>
+                                    <label for="star{{ $i }}"><i class="fas fa-star"></i></label>
+                                @endfor
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="review" class="form-label">Your Review</label>
+                            <textarea class="form-control" name="comment" rows="3" required>{{ old('comment') }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane me-1"></i> Submit Review
+                        </button>
+                    </form>
+                </div>
+            @elseif($alreadyReviewed)
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> Thank you for reviewing this course!
+                </div>
+            @elseif(!$hasBooking)
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-circle"></i> You can only review this course if you have booked it.
+                </div>
+            @elseif(!$courseEnded)
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-circle"></i> You can only leave a review after the course ends.
+                </div>
+            @endif
+
+            <!-- Existing Reviews -->
+            <div class="reviews-list">
+                @forelse($course->reviews as $review)
+                    <div class="review-item border-bottom pb-3 mb-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <img src="{{ asset('storage/profile_images/' . $review->user->image) }}" class="rounded-circle me-2" width="40">
+                            <div>
+                                <h6 class="mb-0">{{ $review->user->name }}</h6>
+                                <div class="rtl-stars">
+                                    @for($i = 5; $i >= 1; $i--)
+                                        <i class="fas fa-star {{ $i <= $review->rating ? 'text-warning' : 'text-muted' }}"></i>
+                                    @endfor
+                                </div>
+                            </div>
+                            <small class="text-muted ms-auto">
+                                {{ $review->created_at ? $review->created_at->diffForHumans() : 'Unknown' }}
+                            </small>
+                        </div>
+                        @if($review->comment)
+                            <p class="mb-0 mt-2">{{ $review->comment }}</p>
+                        @endif
+                    </div>
+                @empty
+                    <div class="text-center py-4 text-muted">
+                        <i class="fas fa-comment-alt fa-2x mb-2"></i>
+                        <p class="mb-0">No reviews yet. Be the first to review this course!</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Right-to-Left Stars Rating Style */
+        .rating-input.rtl-stars {
+            display: flex;
+            direction: rtl;
+            unicode-bidi: bidi-override;
+            gap: 5px;
+        }
+        .rating-input.rtl-stars input[type="radio"] {
+            display: none;
+        }
+        .rating-input.rtl-stars label {
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #ddd;
+            transition: color 0.2s;
+        }
+        .rating-input.rtl-stars input[type="radio"]:checked ~ label {
+            color: #ffc107;
+        }
+        .rating-input.rtl-stars label:hover,
+        .rating-input.rtl-stars label:hover ~ label {
+            color: #ffc107;
+        }
+        .rtl-stars {
+            font-size: 1.2rem;
+            direction: rtl;
+            unicode-bidi: bidi-override;
+        }
+    </style>
+    @endauth
+</div>
 @endsection

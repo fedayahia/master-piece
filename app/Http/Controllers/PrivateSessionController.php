@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\Models\AvailableTime;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 
@@ -22,7 +23,7 @@ class PrivateSessionController extends Controller
     {
         $sessions = PrivateSession::with('instructor')
                     ->latest()
-                    ->paginate(6);
+                    ->paginate(3);
     
         return view('private_sessions', compact('sessions'));
     }
@@ -212,20 +213,34 @@ public function showBookingForm($sessionId) {
     {
         $validated = $request->validate([
             'session_id' => 'required|exists:private_sessions,id',
-            'available_time_id' => 'required|exists:available_times,id'
+            'available_time_id' => 'required|exists:available_times,id',
         ]);
     
-        $timeSlot = \App\Models\AvailableTime::where('id', $validated['available_time_id'])
-                    ->where('is_available', true)
-                    ->firstOrFail();
+        // استرجاع وقت الجلسة المحدد
+        $timeSlot = AvailableTime::findOrFail($validated['available_time_id']);
+        $selectedDate = Carbon::parse($timeSlot->available_date)->toDateString();
     
+        // التحقق من التكرار: هل يوجد حجز لنفس الجلسة الخاصة في نفس التاريخ؟
+        $duplicateBooking = DB::table('bookings')
+            ->join('available_times', 'bookings.available_time_id', '=', 'available_times.id')
+            ->where('bookings.booking_for_id', $validated['session_id'])
+            ->where('bookings.booking_for_type', 'PrivateSession') // تأكدنا أنها نفس القيمة الموجودة في الجدول
+            ->where('bookings.user_id', auth()->id())
+            ->whereDate('available_times.available_date', $selectedDate)
+            ->exists();
+    
+        if ($duplicateBooking) {
+            return back()->with('error', 'You pre-booked this session on the same day.');
+        }
+    
+        // حفظ بيانات الحجز في السيشن
         session([
             'current_booking' => [
                 'type' => 'private',
                 'session_id' => $validated['session_id'],
-                'available_time_id' => $timeSlot->id, 
+                'available_time_id' => $timeSlot->id,
                 'session_date' => $timeSlot->available_date,
-                'time_slot_data' => $timeSlot->toArray(), 
+                'time_slot_data' => $timeSlot->toArray(),
                 'step_completed' => true
             ],
             'booking_type' => 'private'
@@ -236,6 +251,7 @@ public function showBookingForm($sessionId) {
             'item_id' => $validated['session_id']
         ]);
     }
+    
     public function processPayment(Request $request)
     {
         $bookingData = session('current_booking');

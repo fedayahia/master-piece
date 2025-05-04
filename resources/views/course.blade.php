@@ -225,8 +225,8 @@
                                             <div class="overflow-hidden img-border-radius">
                                                 <img src="{{ asset('storage/courses/' . $course->image) }}" alt="{{ $course->title }}" class="img-fluid w-100">
                                             </div>
-                                            <div class="px-4 py-2 bg-primary text-white program-rate">
-                                                ${{ number_format($course->price, 2) }}
+                                            <div class="px-9 py-2 bg-primary text-white program-rate text-center" style="direction: ltr; min-width: 110px; padding-left: 12px; padding-right: 12px;">
+                                                JOD{{ number_format($course->price, 2) }}
                                             </div>
                                         </div>
             

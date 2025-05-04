@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->id();  // ID الأساسي
-            $table->string('title');  // اسم الحدث
-            $table->text('description')->nullable();  // وصف الحدث
-            $table->date('event_date');  // تاريخ الحدث
-            $table->time('start_time');  // وقت البداية
-            $table->time('end_time');  // وقت النهاية
+            $table->id();
+            $table->string('title');  
+            $table->text('description')->nullable();
+            $table->date('event_date'); 
+            $table->time('start_time'); 
+            $table->time('end_time');  
             $table->string('location'); 
             $table->string('image')->nullable();
-            $table->string('instructor')->nullable();  // اسم المدرب (اختياري)
+            $table->string('instructor')->nullable(); 
             $table->boolean('is_free')->default(true); 
             $table->timestamps(); 
         });

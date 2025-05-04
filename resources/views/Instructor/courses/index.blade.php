@@ -359,7 +359,7 @@
                                 <span>{{ Str::limit($course->title, 25) }}</span>
                             </div>
                         </td>
-                        <td data-label="Price">${{ number_format($course->price, 2) }}</td>
+                        <td data-label="Price">JOD{{ number_format($course->price, 2) }}</td>
                         <td data-label="Category"><span class="badge bg-secondary">{{ $course->category }}</span></td>
                         <td data-label="Seats">{{ $course->seats_available }}</td>
                         <td data-label="Actions">

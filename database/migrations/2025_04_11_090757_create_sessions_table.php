@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sessions', function (Blueprint $table) {
-            $table->id(); // عمود id سيكون المفتاح الأساسي
-            $table->string('session_name'); // اسم الجلسة
-            $table->timestamp('start_time')->useCurrent();  // استخدم الوقت الحالي كقيمة افتراضية
-            $table->timestamp('end_time')->nullable(); // وقت نهاية الجلسة
-            $table->timestamps(); // لتخزين وقت الإنشاء والتعديل
+            $table->id();
+            $table->string('session_name'); 
+            $table->timestamp('start_time')->useCurrent(); 
+            $table->timestamp('end_time')->nullable();  
+            $table->timestamps(); 
         });
     }
 

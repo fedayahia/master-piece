@@ -193,7 +193,7 @@
                 <div class="icon">
                     <i class="fas fa-credit-card"></i>
                 </div>
-                <h3>${{ number_format($totalPayments) }}</h3>
+                <h3>JOD{{ number_format($totalPayments) }}</h3>
                 <p>Total Payments
                     <span class="growth-badge growth-up">
                         <i class="fas fa-arrow-up me-1"></i> {{ $paymentGrowth }}%

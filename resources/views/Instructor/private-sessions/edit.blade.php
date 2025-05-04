@@ -37,7 +37,7 @@
                     </div>
 
                     <div class="form-group col-md-3">
-                        <label for="price">Price ($)*</label>
+                        <label for="price">Price (JOD)*</label>
                         <input type="number" class="form-control @error('price') is-invalid @enderror" 
                                id="price" name="price" min="0" step="0.01" 
                                value="{{ old('price', $privateSession->price) }}" required>

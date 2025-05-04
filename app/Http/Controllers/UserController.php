@@ -57,20 +57,13 @@ class UserController extends Controller
         ]);
     }
     
-    
-    
-    
-    
-    
-    
-
     public function edit()
     {
         $user = Auth::user();
         return view('edit', compact('user'));
     }
 
-    // تحديث البيانات
+
     public function update(Request $request)
     {
         $request->validate([
@@ -99,7 +92,7 @@ class UserController extends Controller
     
     public function team()
     {
-        $privateSessions = PrivateSession::with('user')->latest()->take(6)->get(); 
+        $privateSessions = PrivateSession::with('user')->latest()->take(3)->get(); 
 
         $users = User::where('role', 'instructor')->get();
         

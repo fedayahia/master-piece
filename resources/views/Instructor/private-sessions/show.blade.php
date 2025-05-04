@@ -36,11 +36,11 @@
                         <div class="session-meta">
                             <div class="meta-item">
                                 <i class="fas fa-clock"></i>
-                                <span>{{ $privateSession->duration }} minutes</span>
+                                <span>{{ $privateSession->duration }} Hours</span>
                             </div>
                             <div class="meta-item">
-                                <i class="fas fa-dollar-sign"></i>
-                                <span>{{ number_format($privateSession->price, 2) }} JD</span>
+                                <i class="fas fa-money-bill-wave"></i>
+                   <span>JOD{{ number_format($privateSession->price, 2) }} </span>
                             </div>
                         </div>
                     </div>

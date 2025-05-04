@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade');
-            $table->foreignId('session_id')->constrained('course_sessions')->onDelete('cascade'); // تأكد من أن نوع البيانات هنا يتطابق مع جدول sessions
+            $table->foreignId('session_id')->constrained('course_sessions')->onDelete('cascade'); 
             $table->date('date');
             $table->enum('status', ['present', 'absent', 'late']);
             $table->timestamps();

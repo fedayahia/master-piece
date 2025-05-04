@@ -49,7 +49,7 @@
     /* Form Controls */
     .form-control {
         width: 100%;
-        padding: 0.75rem 1rem; /* تأكد من أن هناك مساحة داخلية كافية */
+        padding: 0.75rem 1rem;
         border: 1px solid #ced4da;
         border-radius: 0.375rem;
         font-size: 1rem;
@@ -222,7 +222,7 @@
                 <div class="form-group">
                     <label for="price">Price *</label>
                     <div class="input-group">
-                        <span class="input-group-text">$</span>
+                        <span class="input-group-text">JOD</span>
                         <input type="number" name="price" id="price" class="form-control @error('price') is-invalid @enderror" 
                                value="{{ old('price', $course->price) }}" step="0.01" min="0" required>
                     </div>

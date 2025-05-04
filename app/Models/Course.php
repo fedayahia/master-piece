@@ -57,12 +57,12 @@ public function bookings()
 public function parents()
 {
     return $this->hasManyThrough(
-        User::class,       // النموذج الهدف
-        Booking::class,    // النموذج الوسيط
-        'course_id',       // المفتاح الأجنبي في جدول Booking الذي يربطه بـ Course
-        'id',              // المفتاح الأساسي في جدول User
-        'id',              // المفتاح الأساسي في Course
-        'user_id'          // المفتاح الأجنبي في جدول Booking الذي يربطه بـ User
+        User::class,       
+        Booking::class,     
+        'course_id',      
+        'id',            
+        'id',              
+        'user_id'
     )->where('role', 'parent')->distinct();
 }
 

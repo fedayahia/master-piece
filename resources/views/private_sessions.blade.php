@@ -30,7 +30,8 @@
                             <div class="overflow-hidden img-border-radius">
                                 <img src="{{ asset('storage/private_sessions/'.$session->img) }}" alt="{{ $session->title }}" class="img-fluid w-100">
                             </div>
-                            <div class="px-4 py-2 bg-primary text-white program-rate">${{ number_format($session->price, 2) }}</div>
+                            <div class="px-9 py-2 bg-primary text-white program-rate text-center" style="direction: ltr; min-width: 110px; padding-left: 12px; padding-right: 12px;">
+                                JOD{{ number_format($session->price, 2) }}</div>
                         </div>
 
                         <div class="course-text bg-white px-4 pb-3">
@@ -67,6 +68,12 @@
             <!-- Pagination -->
             <div class="d-inline-block text-center wow fadeIn" data-wow-delay="0.1s" style="margin-top: 50px;">
                 {{-- {{ $privateSessions->links() }} <!-- Pagination links --> --}}
+            </div>
+
+            <div class="col-12 mt-5 wow fadeIn" data-wow-delay="0.3s">
+                <nav aria-label="Page navigation">
+                    {{ $sessions->links('pagination::bootstrap-5') }}
+                </nav>
             </div>
         </div> <!-- Close the row here -->
     </div>

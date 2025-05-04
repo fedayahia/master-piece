@@ -236,7 +236,6 @@
 </div>
 
 <style>
-    /* أضف هذه الأنماط إلى الستايل السابق */
     .badge {
         padding: 0.35em 0.65em;
         font-size: 0.75em;
@@ -252,7 +251,6 @@
         background-color: var(--primary);
     }
     
-    /* تحسين عرض الجدول على الشاشات الصغيرة */
     @media (max-width: 992px) {
         .table-responsive {
             overflow-x: auto;

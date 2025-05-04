@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use App\Models\Course;  // تأكد من استيراد كلاس Course
-use App\Models\PrivateSession;  // تأكد من استيراد كلاس PrivateSession
+use App\Models\Course;  
+use App\Models\PrivateSession;  
 use App\Models\CourseSession;
 
 class Booking extends Model
@@ -39,7 +39,7 @@ class Booking extends Model
 
     public function course()
     {
-        return $this->belongsTo(Course::class);  // العلاقة مع الدورة
+        return $this->belongsTo(Course::class);  
     }
 
 
@@ -49,7 +49,6 @@ public function bookingable()
 }
 
 
-    // للحصول على نوع الحجز (course أو private_session)
     public function getBookingTypeLabelAttribute()
     {
         if ($this->booking_for_type === \App\Models\Course::class) {
@@ -67,19 +66,16 @@ public function bookingable()
         return 'Unknown';
     }
 
-    // دالة لتوليد رقم المقعد
     public static function generateSeatNumber()
     {
         return 'SEAT-' . strtoupper(Str::random(6));
     }
 
-    // العلاقة polymorphic
     public function booking_for()
     {
         return $this->morphTo(__FUNCTION__, 'booking_for_type', 'booking_for_id');
     }
 
-    // إذا كان الحجز دورة أو جلسة خاصة، يمكنك جلب اسم الدورة أو الجلسة
     public function getBookingForName()
     {
         if ($this->booking_for_type === Course::class) {
@@ -95,7 +91,7 @@ public function bookingable()
 
     public function privateSession()
     {
-        return $this->belongsTo(PrivateSession::class, 'booking_for_id'); // تصحيح الحقل
+        return $this->belongsTo(PrivateSession::class, 'booking_for_id'); 
     }
 
     public function payments()

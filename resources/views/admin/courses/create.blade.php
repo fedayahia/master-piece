@@ -46,19 +46,18 @@
         color: var(--primary);
     }
 
-    /* Form Controls */
-   /* تعديل لحل مشكلة النصوص في input وtextarea */
+ 
 .form-control {
-    padding: 0.75rem 1rem; /* تأكد من أن هناك مساحة داخلية كافية */
-    font-size: 1rem; /* تأكد من أن الخط بالحجم المناسب */
-    line-height: 1.5; /* تحسين المسافة بين الأسطر */
-    height: auto; /* تأكد من أن الصندوق يحتوي على مساحة كافية لعرض النص */
+    padding: 0.75rem 1rem; 
+    font-size: 1rem;
+    line-height: 1.5; 
+    height: auto;
 }
 
 textarea.form-control {
-    min-height: 120px; /* تأكد من أنه يوجد مساحة كافية لعرض النص */
+    min-height: 120px; 
     resize: vertical;
-    line-height: 1.5; /* تأكد من المسافة بين الأسطر داخل الـ textarea */
+    line-height: 1.5; 
 }
 
     .form-control:focus {
@@ -196,7 +195,7 @@ textarea.form-control {
                 <div class="form-group">
                     <label for="price">Price *</label>
                     <div class="input-group">
-                        <span class="input-group-text">$</span>
+                        <span class="input-group-text">JOD</span>
                         <input type="number" name="price" id="price" class="form-control @error('price') is-invalid @enderror" 
                                value="{{ old('price') }}" step="0.01" min="0" required>
                     </div>

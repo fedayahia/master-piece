@@ -74,11 +74,9 @@ public function averageRating()
     return $this->hasMany(Review::class)->avg('rating'); 
 }
 
-// في موديل User
 public function totalReviews()
 {
-    // افتراضًا أن هناك علاقة بين `User` و `Review`
-    return $this->hasMany(Review::class)->count();  // assuming that Review has a 'user_id' column
+    return $this->hasMany(Review::class)->count(); 
 }
 
 public function enrolledCourses()

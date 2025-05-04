@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('code');
             $table->decimal('discount_amount', 10, 2);
-            $table->enum('discount_type', ['percentage', 'fixed']);
+            $table->string('discount_type')->default('percentage');
             $table->unsignedBigInteger('applicable_id');
             $table->string('applicable_type');
             $table->enum('status', ['active', 'inactive'])->default('active');
-            $table->timestamps(); // يعني created_at و updated_at
+            $table->timestamps(); 
         });
     }
     /**

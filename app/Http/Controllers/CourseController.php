@@ -29,42 +29,41 @@ class CourseController extends Controller
 
     
     
-    public function show($id)
-    {
-        $course = Course::with(['instructor', 'sessions'])->findOrFail($id);
-    
-        $session = $course->sessions->first();
-    
-        return view('courses.show', compact('course', 'session'));
-    }
-    
+public function show($id)
+{
+    $course = Course::with(['instructor', 'sessions' => function($query) {
+        $query->withCount(['bookings as bookings_count']);
+    }])->findOrFail($id);
 
-    public function bookCourse(Request $request, $course_id) {
-        $course = Course::findOrFail($course_id);
-        
-        if($course->seats_available <= 0) {
-            return back()->with('error', 'No seats available for this course');
-        }
+    return view('courses.show', compact('course'));
+}
+
+public function bookCourse(Request $request, $course_id) {
+    $course = Course::findOrFail($course_id);
     
-        $booking = Booking::create([
-            'user_id' => auth()->id(),
-            'course_id' => $course_id,
-            'status' => 'pending_payment',
-            'booking_date' => now(),
-        ]);
-    
-        session()->put('current_booking_id', $booking->id);
-        session()->put('course_id', $course_id);
-        session()->put('course_title', $course->title);
-        session()->put('course_price', $course->price);
-    
-        if($request->has('session_id')) {
-            $session = CourseSession::find($request->session_id);
-            $booking->update(['session_id' => $session->id]);
-            session()->put('session_id', $session->id);
-        }
-    
-        return redirect()->route('checkout.billing');
+    if($course->seats_available <= 0) {
+        return back()->with('error', 'No seats available for this course');
     }
-    
+
+    $booking = Booking::create([
+        'user_id' => auth()->id(),
+        'booking_for_type' => 'App\Models\Course', // or just 'Course' depending on your setup
+        'booking_for_id' => $course_id,
+        'status' => 'pending_payment',
+        'booking_date' => now(),
+    ]);
+
+    session()->put('current_booking_id', $booking->id);
+    session()->put('course_id', $course_id);
+    session()->put('course_title', $course->title);
+    session()->put('course_price', $course->price);
+
+    if($request->has('session_id')) {
+        $session = CourseSession::find($request->session_id);
+        $booking->update(['session_id' => $session->id]);
+        session()->put('session_id', $session->id);
+    }
+
+    return redirect()->route('checkout.billing');
+}
 }

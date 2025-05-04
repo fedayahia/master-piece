@@ -4,24 +4,23 @@
 <style>
     /* Main Container */
     select {
-        display: block; /* يجعل الـ select عنصرًا متاحًا بالكامل داخل الحاوية */
-        width: 100%; /* يأخذ عرض الحاوية بالكامل */
-        padding: 10px; /* إضافة حواف داخلية */
-        font-size: 1rem; /* حجم الخط */
-        border: 1px solid #ccc; /* حافة */
-        border-radius: 5px; /* حواف دائرية */
-        background-color: #fff; /* خلفية بيضاء */
+        display: block;
+        width: 100%; 
+        padding: 10px; 
+        font-size: 1rem; 
+        border: 1px solid #ccc; 
+        border-radius: 5px; 
+        background-color: #fff; 
     }
 
-    /* تحسين الـ form-control إذا كانت تؤثر على المظهر */
     .form-control {
-        padding: 0; /* إزالة الحواف الداخلية الزائدة */
-        width: 100%; /* التأكد من أن الـ select يشغل المساحة بالكامل */
-        font-size: 1rem; /* حجم الخط */
-        border: 1px solid #ccc; /* حافة رقيقة */
-        border-radius: 5px; /* حواف دائرية */
-        background-color: #fff; /* خلفية بيضاء */
-        color: #333; /* لون النص */
+        padding: 0; 
+        width: 100%; 
+        font-size: 1rem; 
+        border: 1px solid #ccc; 
+        border-radius: 5px; 
+        background-color: #fff; 
+        color: #333; 
     }
     
     .container {
@@ -33,7 +32,6 @@
         max-width: 100%;
     }
 
-    /* Header Section */
     .section-header {
         display: flex;
         flex-direction: column;
@@ -342,7 +340,7 @@
                     <th>Price</th>
                     <th>Category</th>
                     <th>Seats Available</th>
-                    <th>Instructor</th> <!-- عمود المدرب الجديد -->
+                    <th>Instructor</th> 
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -358,11 +356,10 @@
                                     <span>{{ Str::limit($course->title, 25) }}</span>
                                 </div>
                             </td>
-                            <td data-label="Price">${{ number_format($course->price, 2) }}</td>
+                            <td data-label="Price">JOD{{ number_format($course->price, 2) }}</td>
                             <td data-label="Category"><span>{{ $course->category }}</span></td>
                             <td data-label="Seats" class="text-center">{{ $course->seats_available }}</td>
                             <td data-label="Instructor">
-                                <!-- إضافة اسم المدرب -->
                                 <span>{{ $course->instructor ? $course->instructor->name : 'N/A' }}</span>
                             </td>
                         <td data-label="Actions">

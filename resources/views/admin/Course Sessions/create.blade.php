@@ -193,9 +193,8 @@
                        class="form-control @error('start_date') is-invalid @enderror" 
                        value="{{ old('start_date') }}" 
                        required 
-                       min="{{ now()->format('Y-m-d\TH:i') }}" <!-- لتحديد التاريخ والوقت الحالي كأدنى قيمة -->
-                       max="{{ now()->addYear()->format('Y-m-d\TH:i') }}" <!-- الحد الأقصى للعام المقبل -->
-                       >
+                       min="{{ now()->format('Y-m-d\TH:i') }}" 
+                       max="{{ now()->addYear()->format('Y-m-d\TH:i') }}"                        >
                 @error('start_date')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
