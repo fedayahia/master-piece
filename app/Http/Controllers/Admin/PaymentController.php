@@ -15,24 +15,27 @@ class PaymentController extends Controller
     public function index()
     {
         $payments = DB::table('payments')
-        ->leftJoin('courses', function($join) {
-            $join->on('payments.payment_for_type', '=', DB::raw("'Course'"))
-                 ->on('payments.payment_for_id', '=', 'courses.id');
-        })
-        ->leftJoin('private_sessions', function($join) {
-            $join->on('payments.payment_for_type', '=', DB::raw("'PrivateSession'"))
-                 ->on('payments.payment_for_id', '=', 'private_sessions.id');
-        })
-        ->select(
-            'payments.*',
-            DB::raw("CASE 
-                        WHEN payments.payment_for_type = 'Course' THEN courses.title
-                        WHEN payments.payment_for_type = 'PrivateSession' THEN private_sessions.title
-                        ELSE 'Unknown'
-                    END AS item_name")
-        )
-        ->get();
-
+            ->leftJoin('courses', function($join) {
+                $join->on('payments.payment_for_type', '=', DB::raw("'Course'"))
+                     ->on('payments.payment_for_id', '=', 'courses.id');
+            })
+            ->leftJoin('private_sessions', function($join) {
+                $join->on('payments.payment_for_type', '=', DB::raw("'PrivateSession'"))
+                     ->on('payments.payment_for_id', '=', 'private_sessions.id');
+            })
+            ->leftJoin('users', 'payments.user_id', '=', 'users.id')
+            ->select(
+                'payments.*',
+                'users.name as user_name', 
+                DB::raw("CASE 
+                    WHEN payments.payment_for_type = 'Course' THEN courses.title
+                    WHEN payments.payment_for_type = 'PrivateSession' THEN private_sessions.title
+                    ELSE 'Unknown'
+                END AS item_name")
+            )
+            ->latest('payments.created_at')
+            ->paginate(10);
+    
         return view('admin.payments.index', compact('payments'));
     }
 
@@ -75,10 +78,46 @@ class PaymentController extends Controller
 
         return redirect()->route('admin.payments.index')->with('success', 'Payment added successfully');
     }
-
     public function show($id)
     {
-        $payment = Payment::with(['user', 'paymentable', 'booking'])->findOrFail($id);
+        $payment = DB::table('payments')
+            ->leftJoin('courses', function($join) {
+                $join->on('payments.payment_for_type', '=', DB::raw("'Course'"))
+                     ->on('payments.payment_for_id', '=', 'courses.id');
+            })
+            ->leftJoin('private_sessions', function($join) {
+                $join->on('payments.payment_for_type', '=', DB::raw("'PrivateSession'"))
+                     ->on('payments.payment_for_id', '=', 'private_sessions.id');
+            })
+            ->leftJoin('users', 'payments.user_id', '=', 'users.id')
+            ->select(
+                'payments.*',
+                'users.name as user_name',
+                'users.email as user_email',
+                'users.phone_number as user_phone',
+                DB::raw("CASE 
+                    WHEN payments.payment_for_type = 'Course' THEN 'Course'
+                    WHEN payments.payment_for_type = 'PrivateSession' THEN 'Private Session'
+                    ELSE payments.payment_for_type
+                END AS payment_type"),
+                DB::raw("CASE 
+                    WHEN payments.payment_for_type = 'Course' THEN courses.title
+                    WHEN payments.payment_for_type = 'PrivateSession' THEN private_sessions.title
+                    ELSE 'Unknown'
+                END AS item_name"),
+                DB::raw("CASE 
+                    WHEN payments.payment_for_type = 'Course' THEN courses.description
+                    WHEN payments.payment_for_type = 'PrivateSession' THEN private_sessions.description
+                    ELSE NULL
+                END AS item_description") 
+            )
+            ->where('payments.id', $id)
+            ->first();
+    
+        if (!$payment) {
+            abort(404);
+        }
+    
         return view('admin.payments.show', compact('payment'));
     }
 

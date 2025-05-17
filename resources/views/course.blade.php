@@ -53,7 +53,11 @@
     margin-bottom: 20px;
 }
 
-.input-group-text {
+.input-group-tex {
+    text-align: center;
+    height: 50px;
+    width: 40px;
+    padding-top: 15px;
     border-radius: 8px 0 0 8px !important;
     color: var(--bs-primary) !important;
     background-color: rgba(255, 72, 128, 0.1) !important;
@@ -172,7 +176,7 @@
                             <div class="col-md-12">
                                 <label for="search" class="form-label">Search Courses</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0">
+                                    <span class="input-group-tex bg-white border-end-0">
                                         <i class="fas fa-search text-primary"></i>
                                     </span>
                                     <input type="text" name="search" id="search" class="form-control border-start-0" 
@@ -189,9 +193,10 @@
                                     <select name="category" id="category" class="form-select border-start-0">
                                         <option value="">All Categories</option>
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category }}" {{ request('category') == $category ? 'selected' : '' }}>
-                                                {{ $category }}
-                                            </option>
+                                        <option value="{{ $category }}" {{ request('category') == $category ? 'selected' : '' }}>
+                                            {{ $category }}
+                                        </option>
+                                        
                                         @endforeach
                                     </select>
                                 </div>
@@ -232,7 +237,7 @@
             
                                         <div class="course-text bg-white px-4 pb-3">
                                             <div class="course-text-inner">
-                                                <a href="{{ route('courses.show', $course->id) }}" class="h4">{{ $course->title }}</a>
+                                                <a href="{{ route('courses.show', $course->id) }}" class="h6">{{ $course->title }}</a>
                                                 <p class="mt-3 mb-0">{{ $course->description }}</p>
                                             </div>
                                         </div>
@@ -255,6 +260,10 @@
                                         <div class="d-flex justify-content-between px-4 py-2 bg-primary rounded-bottom">
                                             <small class="text-white"><i class="fas fa-chair me-1"></i> {{ $course->seats_available }} Seats</small>
                                             <small class="text-white"><i class="fas fa-clock me-1"></i> {{ $course->duration }} Hours</small>
+                                            <small class="text-white">
+                                                <i class="fas {{ $course->is_online ? 'fa-wifi' : 'fa-building' }} me-1"></i>
+                                                {{ $course->is_online ? 'Online' : 'Offline' }}
+                                            </small>
                                         </div>
                                     </div>
                                 </div>
@@ -264,7 +273,42 @@
                         <!-- Laravel Dynamic Pagination -->
                         <div class="col-12 mt-5 wow fadeIn" data-wow-delay="0.3s">
                             <nav aria-label="Page navigation">
-                                {{ $courses->links('pagination::bootstrap-5') }}
+                                <ul class="pagination justify-content-center flex-wrap">
+                                    {{-- Previous Page Link --}}
+                                    @if ($courses->onFirstPage())
+                                        <li class="page-item disabled">
+                                            <span class="page-link">&laquo;</span>
+                                        </li>
+                                    @else
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $courses->previousPageUrl() }}" rel="prev">&laquo;</a>
+                                        </li>
+                                    @endif
+                        
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($courses->getUrlRange(1, $courses->lastPage()) as $page => $url)
+                                        @if ($page == $courses->currentPage())
+                                            <li class="page-item active" aria-current="page">
+                                                <span class="page-link">{{ $page }}</span>
+                                            </li>
+                                        @else
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                        
+                                    {{-- Next Page Link --}}
+                                    @if ($courses->hasMorePages())
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $courses->nextPageUrl() }}" rel="next">&raquo;</a>
+                                        </li>
+                                    @else
+                                        <li class="page-item disabled">
+                                            <span class="page-link">&raquo;</span>
+                                        </li>
+                                    @endif
+                                </ul>
                             </nav>
                         </div>
                     </div>

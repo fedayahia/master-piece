@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/UserController.php
 
 namespace App\Http\Controllers;
 
@@ -20,36 +19,40 @@ class UserController extends Controller
     {
         $user = Auth::user();
         
-        $bookings = $user->bookings()->with('bookingable')->get();
-        
-        $bookedItems = $bookings->map(function ($booking) {
-            $bookingItem = $booking->bookingable;
-        
-            if ($bookingItem) {
-                if ($bookingItem instanceof \App\Models\PrivateSession) {
-                    $bookingItem->type = 'Private Session';
-                    
-                    $availableTime = $bookingItem->availableTimes()->first();
-                    if ($availableTime) {
-                        $bookingItem->selected_time = $availableTime->available_date;
-                    }
-                } elseif ($bookingItem instanceof \App\Models\Course) {
-                    $bookingItem->type = 'Course';
-                    
-                    $upcomingSession = $bookingItem->sessions()
-                        ->where('start_date', '>', now()) 
-                        ->orderBy('start_date', 'asc') 
-                        ->first();
-                    
-                    if ($upcomingSession) {
-                        $bookingItem->selected_time = $upcomingSession->start_date;
-                        $bookingItem->session_title = $upcomingSession->title;
-                    }
+        $bookings = $user->bookings()
+        ->with(['bookingable', 'availableTime']) 
+        ->get();
+    
+    $bookedItems = $bookings->map(function ($booking) {
+        $bookingItem = $booking->bookingable;
+    
+        if ($bookingItem) {
+            $bookingItem->status = $booking->status;
+    
+            if ($bookingItem instanceof \App\Models\PrivateSession) {
+                $bookingItem->type = 'Private Session';
+    
+                if ($booking->availableTime) {
+                    $bookingItem->selected_time = $booking->availableTime->available_date;
+                }
+            } elseif ($bookingItem instanceof \App\Models\Course) {
+                $bookingItem->type = 'Course';
+    
+                $upcomingSession = $bookingItem->sessions()
+                    ->where('start_date', '>', now())
+                    ->orderBy('start_date', 'asc')
+                    ->first();
+    
+                if ($upcomingSession) {
+                    $bookingItem->selected_time = $upcomingSession->start_date;
+                    $bookingItem->session_title = $upcomingSession->title;
                 }
             }
-        
-            return $bookingItem;
-        })->filter();
+        }
+    
+        return $bookingItem;
+    })->filter();
+    
         
         return view('profile', [
             'user' => $user,
@@ -92,7 +95,7 @@ class UserController extends Controller
     
     public function team()
     {
-        $privateSessions = PrivateSession::with('user')->latest()->take(3)->get(); 
+        $privateSessions = PrivateSession::with('user')->orderBy('created_at', 'desc')->take(3)->get();
 
         $users = User::where('role', 'instructor')->get();
         
@@ -104,19 +107,7 @@ class UserController extends Controller
     }
     
     
-    // app/Models/User.php
-
-    public function courseReviews()
-    {
-        return $this->hasManyThrough(
-            \App\Models\Review::class,
-            \App\Models\Course::class,
-            'instructor_id', // Foreign key on courses table
-            'course_id',     // Foreign key on reviews table
-            'id',            // Local key on users table
-            'id'             // Local key on courses table
-        );
-    }   
+   
 
 }
 

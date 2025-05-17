@@ -187,13 +187,22 @@
                     {{ $course->seats_available }} / 
                     {{ $course->sessions->max('max_seats') ?? '∞' }}
                     <div class="progress mt-2" style="height: 6px;">
-                        <div class="progress-bar bg-{{ $course->seats_available/$course->sessions->max('max_seats') > 0.7 ? 'success' : ($course->seats_available/$course->sessions->max('max_seats') > 0.3 ? 'warning' : 'danger') }}" 
-                             role="progressbar" 
-                             style="width: {{ ($course->sessions->max('max_seats') ? ($course->seats_available/$course->sessions->max('max_seats') * 100) : 100) }}%" 
-                             aria-valuenow="{{ $course->seats_available }}" 
-                             aria-valuemin="0" 
-                             aria-valuemax="{{ $course->sessions->max('max_seats') ?? 100 }}">
-                        </div>
+                        @php
+                        $maxSeats = $course->sessions->max('max_seats');
+                        $seatsAvailable = $course->seats_available;
+                        $progress = ($maxSeats && $maxSeats > 0) ? ($seatsAvailable / $maxSeats) : 0;
+                        $barColor = $progress > 0.7 ? 'success' : ($progress > 0.3 ? 'warning' : 'danger');
+                        $progressWidth = $progress * 100;
+                    @endphp
+                    
+                    <div class="progress-bar bg-{{ $barColor }}"
+                         role="progressbar"
+                         style="width: {{ $progressWidth }}%"
+                         aria-valuenow="{{ $seatsAvailable }}"
+                         aria-valuemin="0"
+                         aria-valuemax="{{ $maxSeats ?? 100 }}">
+                    </div>
+                    
                     </div>
                 </span>
             </div>
@@ -203,7 +212,7 @@
             <div class="detail-item">
                 <span class="detail-label">Course Image:</span>
                 <span class="detail-value">
-                    <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="course-image" style="max-width: 300px;">
+                    <img src="{{ asset('storage/courses/' . $course->image) }}" alt="Course Image" class="course-image" style="max-width: 300px;">
                 </span>
             </div>
             @endif
@@ -227,18 +236,34 @@
                 </span>
             </div>
             
-        
-            
+            <div class="detail-item">
+                <span class="detail-label">Course Type:</span>
+                <span class="detail-value">
+                    @if($course->is_online)
+                        <span class="badge ">
+                            <i class="fas fa-laptop me-1"></i> Online Course
+                        </span>
+                    @else
+                        <span class="badge ">
+                            <i class="fas fa-user-friends me-1"></i> Offline Course
+                        </span>
+                    @endif
+                </span>
+            </div>
             <div class="detail-item">
                 <span class="detail-label">Created At:</span>
-                <span class="detail-value">{{ $course->created_at->format('M d, Y h:i A') }}</span>
+                <span class="detail-value">
+                    {{ optional($course->created_at)->format('M d, Y h:i A') ?? 'N/A' }}
+                </span>
             </div>
             
             <div class="detail-item">
                 <span class="detail-label">Last Updated:</span>
-                <span class="detail-value">{{ $course->updated_at->format('M d, Y h:i A') }}</span>
+                <span class="detail-value">
+                    {{ optional($course->updated_at)->format('M d, Y h:i A') ?? 'N/A' }}
+                </span>
             </div>
-        </div>
+            
         
         <div class="card-footer">
             {{-- <a href="{{ route('admin.courses.edit', $course->id) }}" class="btn btn-primary me-2">

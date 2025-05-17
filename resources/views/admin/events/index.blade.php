@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-
+@section('content')
 <style>
     :root {
         --primary: #393D72;
@@ -42,7 +42,7 @@
     .btn {
         padding: 0.75rem 1.5rem;
         border-radius: 0.5rem;
-        font-weight: 500;
+        font-weight: 400;
         transition: all 0.3s ease;
         display: inline-flex;
         align-items: center;
@@ -63,6 +63,11 @@
     }
 
     /* Table Styling */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .table {
         width: 100%;
         margin-bottom: 1.5rem;
@@ -79,11 +84,8 @@
         padding: 1rem;
         font-weight: 500;
         vertical-align: middle;
-        text-align: right;
+        text-align: left;
     }
-    .table th, .table td {
-    text-align: start;
-}
 
     .table td {
         padding: 1rem;
@@ -95,6 +97,23 @@
         background-color: rgba(57, 61, 114, 0.03);
     }
 
+    /* Badges */
+    .badge {
+        padding: 0.35em 0.65em;
+        font-size: 0.75em;
+        font-weight: 500;
+        border-radius: 0.25rem;
+        color: white;
+    }
+    
+    .bg-success {
+        background-color: #28a745;
+    }
+    
+    .bg-primary {
+        background-color: var(--primary);
+    }
+
     /* Action Buttons */
     .action-buttons {
         display: flex;
@@ -102,8 +121,8 @@
     }
 
     .btn-action {
-        width: 36px;
-        height: 36px;
+        width: 30px;
+        height: 30px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -120,13 +139,15 @@
         color: #212529;
     }
 
-    .btn-delete {
+    .btn-delet {
         background-color: var(--dark);
         color: white;
+        border:var(--dark); 
     }
 
     .btn-action:hover {
         transform: scale(1.1);
+        opacity: 0.9;
     }
 
     /* Empty State */
@@ -134,6 +155,27 @@
         text-align: center;
         padding: 3rem;
         color: #6c757d;
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        color: #dee2e6;
+        margin-bottom: 1rem;
+    }
+
+    /* Pagination */
+    .pagination {
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .page-item.active .page-link {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+
+    .page-link {
+        color: var(--primary);
     }
 
     /* Responsive Adjustments */
@@ -148,118 +190,112 @@
             gap: 1rem;
         }
         
-        .table-responsive {
-            border: 1px solid #dee2e6;
-            border-radius: 0.5rem;
-        }
-        
         .table {
             min-width: 100%;
         }
         
         .table th, .table td {
             padding: 0.75rem;
+            font-size: 0.85rem;
         }
         
         .action-buttons {
+            flex-wrap: wrap;
             justify-content: center;
         }
-    }
-
-    @media (max-width: 575px) {
+        
         .btn {
             padding: 0.65rem 1rem;
             font-size: 0.9rem;
         }
     }
+
+    @media (max-width: 575px) {
+        .container {
+            padding: 1rem;
+            margin: 1rem auto;
+        }
+        
+        .section-header h2 {
+            font-size: 1.5rem;
+        }
+    }
 </style>
 
-@section('content')
 <div class="container">
     <div class="section-header">
         <h2>Manage Events</h2>
+        <a href="{{ route('admin.events.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add New Event
+        </a>
     </div>
 
-    <a href="{{ route('admin.events.create') }}" class="btn btn-primary mb-3">
-        <i class="fas fa-plus me-2"></i>Add New Event
-    </a>
+    @if($events->isEmpty())
+        <div class="empty-state">
+            <i class="fas fa-calendar-alt"></i>
+            <h3>No Events Found</h3>
+            <p>There are currently no events available. Click the button above to add a new event.</p>
+        </div>
+    @else
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Location</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($events as $event)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $event->title }}</td>
+                        <td>{{ $event->event_date->format('Y-m-d') }}</td>
+                        <td>
+                            {{ $event->start_time->format('h:i A') }} - 
+                            {{ $event->end_time->format('h:i A') }}
+                        </td>
+                        <td>{{ $event->location ?? 'Online' }}</td>
+                        <td>
+                            @if($event->is_free)
+                                <span class="badge bg-success">Free</span>
+                            @else
+                                <span class="badge bg-primary">Paid</span>
+                            @endif
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ route('admin.events.show', $event->id) }}" class="btn-action btn-show" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ route('admin.events.edit', $event->id) }}" class="btn-action btn-edit" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-action btn-delet" title="Delete" onclick="return confirm('Are you sure you want to delete this event?')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Title</th>
-                    <th>Date</th>
-                    <th>Location</th>
-                    <th>Type</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($events as $event)
-                <tr>
-                    <td>{{ $event->id }}</td>
-                    <td>{{ $event->title }}</td>
-                    <td>{{ $event->event_date->format('Y-m-d') }}</td>
-                    <td>{{ $event->location }}</td>
-                    <td>
-                        @if($event->is_free)
-                            <span class="badge bg-success">Free</span>
-                        @else
-                            <span class="badge bg-primary">Paid</span>
-                        @endif
-                    </td>
-              
-                    <td>
-                        <div class="action-buttons">
-                            <a href="{{ route('admin.events.show', $event->id) }}" class="btn-action btn-show" title="View">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('admin.events.edit', $event->id) }}" class="btn-action btn-edit" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-action btn-delete" title="Delete">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+        @if($events->hasPages())
+            <div class="d-flex justify-content-center mt-4">
+                {{ $events->links() }}
+            </div>
+        @endif
+    @endif
 </div>
-
-<style>
-    .badge {
-        padding: 0.35em 0.65em;
-        font-size: 0.75em;
-        font-weight: 500;
-        border-radius: 0.25rem;
-    }
-    
-    .bg-success {
-        background-color: #28a745;
-    }
-    
-    .bg-primary {
-        background-color: var(--primary);
-    }
-    
-    @media (max-width: 992px) {
-        .table-responsive {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .table {
-            min-width: 900px;
-        }
-    }
-</style>
 @endsection

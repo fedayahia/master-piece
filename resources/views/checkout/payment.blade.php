@@ -81,19 +81,13 @@
                         <div class="col-md-6">
                             <h5>Payment Method</h5>
                             <div class="list-group">
-                                <a href="#" class="list-group-item list-group-item-action active" id="paypal-btn">
-                                    <i class="fab fa-paypal me-2"></i> Pay with PayPal
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action" id="stripe-btn">
+                                <a href="#" class="list-group-item list-group-item-action active" id="stripe-btn">
                                     <i class="fab fa-cc-stripe me-2"></i> Pay with Credit Card
                                 </a>
                             </div>
 
-                            <!-- PayPal Section -->
-                            <div id="paypal-button-container" class="mt-3 d-none"></div>
-
                             <!-- Stripe Form -->
-                            <form id="stripe-payment-form" class="d-none">
+                            <form id="stripe-payment-form" class="mt-3">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="card-element" class="form-label">Credit or debit card</label>
@@ -119,7 +113,6 @@
 </div>
 
 <!-- Scripts -->
-<script src="https://www.paypal.com/sdk/js?client-id={{ env('PAYPAL_CLIENT_ID') }}&currency=USD"></script>
 <script src="https://js.stripe.com/v3/"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -218,23 +211,6 @@
     @endif
 });
 
-    // Toggle between PayPal and Stripe views
-    document.getElementById('paypal-btn').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('stripe-payment-form').classList.add('d-none');
-        document.getElementById('paypal-button-container').classList.remove('d-none');
-        this.classList.add('active');
-        document.getElementById('stripe-btn').classList.remove('active');
-    });
-
-    document.getElementById('stripe-btn').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('paypal-button-container').classList.add('d-none');
-        document.getElementById('stripe-payment-form').classList.remove('d-none');
-        this.classList.add('active');
-        document.getElementById('paypal-btn').classList.remove('active');
-    });
-
     // Stripe payment form submission
     document.getElementById('stripe-payment-form').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -297,79 +273,6 @@
             spinner.classList.add('d-none');
         }
     });
-
-    // Initialize PayPal button
-    paypal.Buttons({
-        style: {
-            layout: 'vertical',
-            color: 'blue',
-            shape: 'rect',
-            label: 'paypal'
-        },
-        createOrder: function(data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    amount: {
-                        value: '{{ session('course_price') - (session('coupon_discount') ?? 0) }}',
-                        currency_code: 'USD'
-                    },
-                    description: 'Payment for {{ session('course_title') }}'
-                }]
-            });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-                return fetch("{{ route('paypal.payment') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        payment_id: data.orderID,
-                        payer_id: details.payer.payer_id
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.error) {
-                        throw new Error(data.error);
-                    }
-                    
-                    return Swal.fire({
-                        icon: 'success',
-                        title: 'Payment Successful!',
-                        html: `
-                            <div class="text-center">
-                                <i class="fas fa-check-circle fa-5x text-success mb-3"></i>
-                                <h4>Thank You!</h4>
-                                <p>Your payment for <strong>${data.course.title}</strong> has been completed.</p>
-                                <p class="text-muted">Transaction ID: ${data.booking.id}</p>
-                            </div>
-                        `,
-                        showConfirmButton: true,
-                        confirmButtonText: 'View Booking',
-                        showCancelButton: true,
-                        cancelButtonText: 'Close'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "{{ url('bookings') }}/" + data.booking.id;
-                        } else {
-                            window.location.href = "{{ url('/') }}";
-                        }
-                    });
-                });
-            });
-        },
-        onError: function(err) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Payment Error',
-                text: err.message || 'An error occurred with PayPal payment',
-                footer: 'Please try again or use another payment method'
-            });
-        }
-    }).render('#paypal-button-container');
 </script>
 
 <style>

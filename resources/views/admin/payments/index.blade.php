@@ -288,8 +288,8 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>User</th>
                     <th>Amount</th>
-                    <th>Payment Method</th>
                     <th>Status</th>
                     <th>Type</th>
                     <th>Item Name</th>
@@ -301,8 +301,8 @@
                 @foreach($payments as $payment)
                     <tr>
                         <td>{{ $payment->id }}</td>
+                        <td>{{ $payment->user_name ?? 'N/A' }}</td>
                         <td>JOD{{ number_format($payment->amount, 2) }}</td>
-                        <td>{{ ucfirst($payment->method) }}</td>
                         <td>
                             <span class="badge badge-{{ $payment->status }}">
                                 {{ ucfirst($payment->status) }}
@@ -386,96 +386,116 @@
         `);
         printWindow.document.close();
     }
-
     function printSinglePayment(paymentId) {
-        // In a real application, you would fetch the payment details via AJAX
-        // For this example, we'll just print the row data
-        
-        const row = document.querySelector(`tr:has(td:first-child:contains("${paymentId}"))`);
-        if (!row) return;
-        
-        const rowClone = row.cloneNode(true);
-        
-        // Remove action buttons from print
-        const cells = rowClone.querySelectorAll('td');
-        cells[cells.length - 1].remove();
-        
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(`
-            <html>
-            <head>
-                <title>Payment Receipt #${paymentId}</title>
-                <style>
-                    body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
-                    h1 { color: #333; text-align: center; margin-bottom: 20px; }
-                    .receipt-header { text-align: center; margin-bottom: 30px; }
-                    .receipt-header h2 { margin: 0; color: #393D72; }
-                    .receipt-header p { margin: 5px 0; color: #666; }
-                    .receipt-details { width: 100%; border-collapse: collapse; margin: 20px 0; }
-                    .receipt-details th { text-align: left; padding: 8px; background-color: #f5f5f5; }
-                    .receipt-details td { padding: 8px; border-bottom: 1px solid #eee; }
-                    .total { font-weight: bold; font-size: 1.1em; margin-top: 20px; }
-                    .footer { text-align: center; margin-top: 40px; font-size: 12px; color: #666; border-top: 1px solid #eee; padding-top: 10px; }
-                    @page { size: auto; margin: 10mm; }
-                </style>
-            </head>
-            <body>
-                <div class="receipt-header">
-                    <h2>Payment Receipt</h2>
-                    <p>Receipt #${paymentId}</p>
-                    <p>Date: ${new Date().toLocaleDateString()}</p>
-                </div>
-                
-                <table class="receipt-details">
-                    <tr>
-                        <th>Payment ID:</th>
-                        <td>${rowClone.cells[0].textContent}</td>
-                    </tr>
-                    <tr>
-                        <th>Amount:</th>
-                        <td>${rowClone.cells[1].textContent}</td>
-                    </tr>
-                    <tr>
-                        <th>Payment Method:</th>
-                        <td>${rowClone.cells[2].textContent}</td>
-                    </tr>
-                    <tr>
-                        <th>Status:</th>
-                        <td>${rowClone.cells[3].textContent.trim()}</td>
-                    </tr>
-                    <tr>
-                        <th>Payment For:</th>
-                        <td>${rowClone.cells[4].textContent}</td>
-                    </tr>
-                    <tr>
-                        <th>Item:</th>
-                        <td>${rowClone.cells[5].textContent}</td>
-                    </tr>
-                    <tr>
-                        <th>Date Paid:</th>
-                        <td>${rowClone.cells[6].textContent}</td>
-                    </tr>
-                </table>
-                
-                <div class="footer">
-                    Thank you for your payment.<br>
-                    Generated on ${new Date().toLocaleDateString()}<br>
-                    For any questions, please contact support.
-                </div>
-                
-                <script>
-                    window.onload = function() {
-                        setTimeout(function() {
-                            window.print();
-                            window.close();
-                        }, 200);
-                    };
-                <\/script>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
+    // Find the row containing the payment ID
+    const rows = document.querySelectorAll('#payments-table tbody tr');
+    let targetRow = null;
+    
+    rows.forEach(row => {
+        if (row.cells[0].textContent.trim() === paymentId.toString()) {
+            targetRow = row;
+        }
+    });
+
+    if (!targetRow) {
+        alert('Payment not found!');
+        return;
     }
+    
+    // Clone the row for printing
+    const rowClone = targetRow.cloneNode(true);
+    
+    // Remove action buttons from print
+    const cells = rowClone.querySelectorAll('td');
+    cells[cells.length - 1].remove();
+    
+    // Get payment data from cells
+    const paymentData = {
+        id: cells[0].textContent.trim(),
+        amount: cells[1].textContent.trim(),
+        method: cells[2].textContent.trim(),
+        status: cells[3].textContent.trim(),
+        type: cells[4].textContent.trim(),
+        item: cells[5].textContent.trim(),
+        date: cells[6].textContent.trim()
+    };
+    
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Payment Receipt #${paymentData.id}</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+                h1 { color: #333; text-align: center; margin-bottom: 20px; }
+                .receipt-header { text-align: center; margin-bottom: 30px; }
+                .receipt-header h2 { margin: 0; color: #393D72; }
+                .receipt-header p { margin: 5px 0; color: #666; }
+                .receipt-details { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                .receipt-details th { text-align: left; padding: 8px; background-color: #f5f5f5; }
+                .receipt-details td { padding: 8px; border-bottom: 1px solid #eee; }
+                .total { font-weight: bold; font-size: 1.1em; margin-top: 20px; }
+                .footer { text-align: center; margin-top: 40px; font-size: 12px; color: #666; border-top: 1px solid #eee; padding-top: 10px; }
+                @page { size: auto; margin: 10mm; }
+            </style>
+        </head>
+        <body>
+            <div class="receipt-header">
+                <h2>Payment Receipt</h2>
+                <p>Receipt #${paymentData.id}</p>
+                <p>Date: ${new Date().toLocaleDateString()}</p>
+            </div>
+            
+            <table class="receipt-details">
+                <tr>
+                    <th>Payment ID:</th>
+                    <td>${paymentData.id}</td>
+                </tr>
+                <tr>
+                    <th>Amount:</th>
+                    <td>${paymentData.amount}</td>
+                </tr>
+                <tr>
+                    <th>Payment Method:</th>
+                    <td>${paymentData.method}</td>
+                </tr>
+                <tr>
+                    <th>Status:</th>
+                    <td>${paymentData.status}</td>
+                </tr>
+                <tr>
+                    <th>Payment For:</th>
+                    <td>${paymentData.type}</td>
+                </tr>
+                <tr>
+                    <th>Item:</th>
+                    <td>${paymentData.item}</td>
+                </tr>
+                <tr>
+                    <th>Date Paid:</th>
+                    <td>${paymentData.date}</td>
+                </tr>
+            </table>
+            
+            <div class="footer">
+                Thank you for your payment.<br>
+                Generated on ${new Date().toLocaleDateString()}<br>
+                For any questions, please contact support.
+            </div>
+            
+            <script>
+                window.onload = function() {
+                    setTimeout(function() {
+                        window.print();
+                        window.close();
+                    }, 200);
+                };
+            <\/script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
 </script>
 
 @endsection

@@ -224,33 +224,34 @@
 <body class="dashboard-container">
 
     <div class="container">
-        <h1 class="mb-4 text-center" style="color: var(--accent);">Dashboard</h1>
-
+        <h1 class="mb-4 text-center" style="color: var(--accent);">My Dashboard</h1>
+    
         <div class="row">
             <div class="col-md-4">
                 <div class="stat-card students-card">
                     <div class="icon"><i class="bi bi-people"></i></div>
-                    <h3>{{ $parentsCount }}</h3>
-                    <p>Number of Students</p>
+                    <h3>{{$totalParents}}</h3>
+                    <p>My Students</p>
                 </div>
             </div>
-       
             
             <div class="col-md-4">
                 <div class="stat-card courses-card">
                     <div class="icon"><i class="bi bi-journal-bookmark"></i></div>
-                    <h3>{{ $coursesCount }}</h3>
-                    <p>Number of Courses</p>
+                    <h3>{{ $totalCourses }}</h3>
+                    <p>My Courses</p>
                 </div>
             </div>
+            
             <div class="col-md-4">
                 <div class="stat-card rating-card">
                     <div class="icon"><i class="bi bi-star-fill"></i></div>
-                    <h3>{{ number_format($averageRating, 1) }}</h3>
-                    <p>Average Rating</p>
+                    <h3>{{ number_format($avgRating, 1) }}</h3>
+                    <p>My Average Rating</p>
                 </div>
             </div>
         </div>
+    </div>
 
         <div class="chart-card mt-5">
             <div class="card-header">
@@ -273,8 +274,8 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $booking->student_name ?? $booking->user->name }}</td>
                                 <td>{{ $booking->session_title ?? $booking->availableTime->privateSession->title }}</td>
-                                <td>{{ \Carbon\Carbon::parse($booking->selected_time ?? $booking->availableTime->available_date)->format('Y-m-d H:i') }}</td>
-                                <td>{{ $booking->duration ?? $booking->availableTime->privateSession->duration }} hours</td>
+                                <td>{{ $booking->selected_time }}</td>
+                                <td>{{ $booking->duration ?? $booking->availableTime->privateSession->duration }}  minutes</td>
                             </tr>
                         @endforeach
                     </tbody>

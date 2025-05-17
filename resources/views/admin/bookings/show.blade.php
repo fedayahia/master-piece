@@ -270,12 +270,5 @@
     </div>
 </div>
 
-    <!-- Action Buttons -->
-    <div class="d-flex justify-content-between mt-4">
-  
-        <a href="{{ route('admin.bookings.index') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-list me-1"></i> All Bookings
-        </a>
-    </div>
-</div>
+
 @endsection

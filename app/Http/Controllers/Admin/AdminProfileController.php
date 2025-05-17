@@ -20,7 +20,13 @@ class AdminProfileController extends Controller
     
         // Validate the inputs
         $request->validate([
-            'full_name' => 'required|string|regex:/^[a-zA-Z]+(?:\s[a-zA-Z]+)+$/|min:3|max:255',
+'full_name' => [
+    'required',
+    'string',
+    'min:2',
+    'max:255',
+    'regex:/^[\p{L}]+$/u'
+],
             'email' => 'required|email|unique:users,email,' . $admin->id,
             'phone_number' => 'nullable|string|regex:/^[0-9]{10,15}$/', // phone number validation
             'password' => 'nullable|confirmed|min:8|regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/',
@@ -30,13 +36,7 @@ class AdminProfileController extends Controller
         // Ensure full name is properly split and handled
         $fullName = explode(' ', $request->input('full_name'));
     
-        // If full name consists of more than one part (first, middle, last), use them accordingly
-        if (count($fullName) >= 2) {
-            // Update the name field with the full name
-            $admin->name = $request->input('full_name');
-        } else {
-            return redirect()->back()->with('error', 'Full name must have at least two parts.');
-        }
+    
     
         $admin->email = $request->input('email');
         $admin->phone_number = $request->input('phone_number');

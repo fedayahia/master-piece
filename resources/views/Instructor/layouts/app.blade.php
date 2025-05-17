@@ -400,19 +400,19 @@
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <!-- رابط Home -->
-                    <a class="dropdown-item" href="{{ route('instructor.dashboard') }}">
+                    <a class="dropdown-item" href="{{ route('home') }}">
                         <i class="fas fa-home mr-2"></i> Home
                     </a>
-    
-                    <!-- رابط الملف الشخصي -->
+
+                    <a class="dropdown-item " href="{{ route('chat.index') }}">
+                        <i class="fas fa-comments me-2"></i> Messages
+                    </a>
                     <a class="dropdown-item" href="{{ route('instructor.profile.show') }}">
                         <i class="fas fa-user mr-2"></i> Profile
                     </a>
     
                     <div class="dropdown-divider"></div>
     
-                    <!-- رابط تسجيل الخروج -->
                     <a class="dropdown-item" href="{{ route('logout') }}"
                        onclick="event.preventDefault();
                                      document.getElementById('logout-form').submit();">

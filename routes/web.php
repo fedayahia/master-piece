@@ -47,14 +47,23 @@ use App\Http\Controllers\Admin\EventController as AdminEventController ;
 use App\Http\Controllers\InstructorDashboardController;
 use App\Http\Controllers\Instructor\ProfileController as InstructorProfileController;
 
+//MESSAGES
+use App\Http\Controllers\MessageController;
 
-    // Routes for Available Time Management
+Route::middleware(['auth'])->group(function () {
+    Route::get('/chat/{userId}', [MessageController::class, 'show'])->name('chat.show');
+    Route::post('/chat', [MessageController::class, 'store'])->name('chat.store');
+    Route::get('/chat', [MessageController::class, 'index'])->name('chat.index');
+    Route::get('/group-chat/{course}', [MessageController::class, 'groupChat'])->name('chat.group');
+    Route::get('/chat/group/{course}', [MessageController::class, 'groupChat'])->name('chat.group');  
+    Route::post('/chat/group/{courseId}', [MessageController::class, 'sendGroupMessage'])->name('chat.group.send');
+});
 
 
 // Private Sessions Routes
 
 
-Route::get('/instructor/dashboard', [InstructorDashboardController::class, 'showDashboard'])->name('instructor.dashboard');
+Route::get('/instructor/dashboard', [InstructorDashboardController::class, 'index'])->name('instructor.dashboard');
 
 Route::get('/private-sessions', [PrivateSessionController::class, 'index'])->name('private-sessions.index');
 
@@ -86,8 +95,6 @@ Route::get('/testimonial', function () { return view('testimonial'); })->name('t
 Route::get('/404', function () { return view('404'); })->name('notfound');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
-Route::resource('live_sessions', LiveSessionController::class);
-Route::post('/live-sessions/{id}/join', [LiveSessionController::class, 'join'])->name('live_sessions.join');
 
 //REGISTER & LOGIN
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.form');
@@ -161,7 +168,7 @@ Route::get('/parent-courses/{course}/details', [ParentController::class, 'course
     Route::get('/courses', [InstructorController::class, 'index'])->name('instructor.courses.index');
     Route::get('/courses/create', [InstructorCourseController::class, 'create'])->name('instructor.courses.create');
 Route::post('/courses', [InstructorCourseController::class, 'store'])->name('instructor.courses.store');
-Route::post('/courses/{id}', [InstructorCourseController::class, 'show'])->name('instructor.courses.show');
+Route::get('/courses/{id}', [InstructorCourseController::class, 'show'])->name('instructor.courses.show');
 Route::get('/courses/{id}/edit', [InstructorCourseController::class, 'edit'])->name('instructor.courses.edit');
 Route::put('/courses/{id}', [InstructorCourseController::class, 'update'])->name('instructor.courses.update');
 Route::delete('/courses/{id}', [InstructorCourseController::class, 'destroy'])->name('instructor.courses.destroy');

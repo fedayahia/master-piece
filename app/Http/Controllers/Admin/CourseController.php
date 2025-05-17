@@ -62,7 +62,10 @@ class CourseController extends Controller
             'category' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'seats_available' => 'required|integer|min:0',
+            'is_online' => 'nullable|boolean',
         ]);
+        
+        $validated['is_online'] = $request->has('is_online');
         
         if ($request->hasFile('image')) {
             $imageName = $request->file('image')->store('courses', 'public'); 
@@ -75,7 +78,6 @@ class CourseController extends Controller
         
         return redirect()->route('admin.courses.index');
     }
-    
 
     public function edit($id)
     {
@@ -93,9 +95,12 @@ class CourseController extends Controller
             'duration' => 'required|integer|min:1',
             'category' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'seats_available' => 'required|integer|min:0', 
+            'seats_available' => 'required|integer|min:0',
+            'is_online' => 'nullable|boolean',
         ]);
     
+        $validated['is_online'] = $request->has('is_online');
+        
         $course = Course::findOrFail($id);
     
         if ($request->hasFile('image')) {
@@ -112,8 +117,6 @@ class CourseController extends Controller
     
         return redirect()->route('admin.courses.index');
     }
-    
-    
     
 
     

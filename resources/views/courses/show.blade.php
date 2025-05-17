@@ -176,6 +176,76 @@
     .ltr-stars {
         font-size: 1.2rem;
     }
+
+    /* Accordion Styles */
+    .session-card .accordion-button {
+        background-color: rgba(255, 255, 255, 0.95);
+        box-shadow: none;
+        border-radius: 8px !important;
+    }
+
+    .session-card .accordion-button:not(.collapsed) {
+        background-color: rgba(255, 255, 255, 0.98);
+        box-shadow: none;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+    }
+
+    .session-card .accordion-button:focus {
+        box-shadow: none;
+        border-color: rgba(0,0,0,.125);
+    }
+
+    .session-card .accordion-body {
+        background-color: rgba(255, 255, 255, 0.98);
+        border-bottom-left-radius: 8px !important;
+        border-bottom-right-radius: 8px !important;
+    }
+
+    .session-card .accordion-item {
+        background-color: transparent;
+        border: none;
+    }
+
+    /* Session details list */
+    .session-card .list-unstyled li {
+        padding: 0.25rem 0;
+    }
+
+    .session-card .list-unstyled i {
+        width: 20px;
+        text-align: center;
+        color: var(--primary);
+    }
+
+    /* Right-to-Left Stars Rating Style */
+    .rating-input.rtl-stars {
+        display: flex;
+        direction: rtl;
+        unicode-bidi: bidi-override;
+        gap: 5px;
+    }
+    .rating-input.rtl-stars input[type="radio"] {
+        display: none;
+    }
+    .rating-input.rtl-stars label {
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: #ddd;
+        transition: color 0.2s;
+    }
+    .rating-input.rtl-stars input[type="radio"]:checked ~ label {
+        color: #ffc107;
+    }
+    .rating-input.rtl-stars label:hover,
+    .rating-input.rtl-stars label:hover ~ label {
+        color: #ffc107;
+    }
+    .rtl-stars {
+        font-size: 1.2rem;
+        direction: rtl;
+        unicode-bidi: bidi-override;
+    }
     
     /* Responsive Adjustments */
     @media (max-width: 768px) {
@@ -208,7 +278,7 @@
     </div>
 @endif
 
-@if($errors->any())
+@if($errors->any()))
     <div class="alert alert-danger alert-dismissible fade show">
         <i class="fas fa-exclamation-circle me-2"></i>
         @foreach ($errors->all() as $error)
@@ -318,40 +388,95 @@
         </div>
         <div class="card-body">
             @foreach($course->sessions as $session)
-                @php
-                    $seatsLeft = $session->max_seats - ($session->bookings_count ?? 0);
-                @endphp
-                <div class="session-card p-4">
-                    <div class="d-flex justify-content-between align-items-start flex-wrap">
-                        <div class="flex-grow-1">
-                            <h5 class="fw-bold mb-2">Session {{ $loop->iteration }}: {{ $session->title }}</h5>
-            
-                            @if($session->description)
-                                <p class="text-muted mb-3">{{ $session->description }}</p>
-                            @endif
-            
-                            <ul class="list-unstyled mb-3 text-muted">
-                                <li class="mb-2">
-                                    <i class="fas fa-calendar-day me-2"></i>
-                                    {{ \Carbon\Carbon::parse($session->start_date)->format('F j, Y') }} -
-                                    {{ \Carbon\Carbon::parse($session->end_date)->format('F j, Y') }}
-                                </li>
-                                <li class="mb-2">
-                                    <i class="fas fa-clock me-2"></i>
-                                    Duration: {{ $session->duration }} hours
-                                </li>
-                                <li class="mb-2">
-                                    <i class="fas fa-signal me-2"></i>
-                                    Mode: {{ ucfirst($session->session_mode) }}
-                                </li>
-                                <li class="mb-2">
-                                    <i class="fas fa-chair me-2"></i>
-                                    Total Seats: {{ $session->max_seats }}
-                                </li>
-                            </ul>
+            <div class="session-card">
+                <div class="accordion" id="sessionAccordion{{ $session->id }}">
+                    <div class="accordion-item border-0">
+                        <h2 class="accordion-header" id="heading{{ $session->id }}">
+                            <button class="accordion-button collapsed p-4" type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapse{{ $session->id }}" 
+                                    aria-expanded="false" 
+                                    aria-controls="collapse{{ $session->id }}">
+                                <div class="d-flex justify-content-between w-100 align-items-center">
+                                    <div>
+                                        <h5 class="fw-bold mb-0">Session {{ $loop->iteration }}: {{ $session->title }}</h5>
+                                        <small class="text-muted">
+                                            <i class="fas fa-calendar-day me-1"></i>
+                                            {{ \Carbon\Carbon::parse($session->start_date)->format('F j, Y h:i A') }}
+                                        </small>
+                                    </div>
+                                    <span class="badge bg-primary seats-badge">
+                                        {{ $session->duration }} hours
+                                    </span>
+                                </div>
+                            </button>
+                        </h2>
+                        <div id="collapse{{ $session->id }}" class="accordion-collapse collapse" 
+                             aria-labelledby="heading{{ $session->id }}" 
+                             data-bs-parent="#sessionAccordion{{ $session->id }}">
+                            <div class="accordion-body pt-0">
+                                @if($session->description)
+                                    <p class="text-muted mb-3">{{ $session->description }}</p>
+                                @endif
+                
+                                <ul class="list-unstyled mb-3 text-muted">
+                                    <li class="mb-2">
+                                        <i class="fas fa-calendar-day me-2"></i>
+                                        <strong>Date:</strong> 
+                                        {{ \Carbon\Carbon::parse($session->start_date)->format('F j, Y h:i A') }} -
+                                        {{ \Carbon\Carbon::parse($session->end_date)->format('h:i A') }}                                    
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-clock me-2"></i>
+                                        <strong>Duration:</strong> {{ $session->duration }} hours
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-signal me-2"></i>
+                                        <strong>Mode:</strong> {{ ucfirst($session->session_mode) }}
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-chair me-2"></i>
+                                        Total Seats: {{ $session->max_seats }}
+                                    </li>
+                                    @if($session->location)
+                                    <li class="mb-2">
+                                        <i class="fas fa-map-marker-alt me-2"></i>
+                                        <strong>Location:</strong> {{ $session->location }}
+                                    </li>
+                                    @endif
+                                    @if($session->zoom_link)
+                                    <li class="mb-2">
+                                        <i class="fas fa-video me-2"></i>
+                                        <strong>Zoom Link:</strong> 
+                                        <a href="{{ $session->zoom_link }}" target="_blank" class="text-primary">
+                                            Join Session
+                                        </a>
+                                    </li>
+                                    @endif
+                                    @if($session->materials)
+                                    <li class="mb-2">
+                                        <i class="fas fa-file-alt me-2"></i>
+                                        <strong>Materials:</strong> 
+                                        <a href="{{ asset('storage/session_materials/' . $session->materials) }}" 
+                                           target="_blank" 
+                                           class="text-primary">
+                                            Download
+                                        </a>
+                                    </li>
+                                    @endif
+                                </ul>
+                                
+                                @if($session->additional_notes)
+                                <div class="alert alert-light border mt-3">
+                                    <h6><i class="fas fa-sticky-note me-2"></i> Instructor Notes</h6>
+                                    <p class="mb-0">{{ $session->additional_notes }}</p>
+                                </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
             @endforeach
         </div>
     </div>
@@ -364,14 +489,16 @@
         </div>
         <div class="card-body">
             @php
-                $hasBooking = \App\Models\Booking::where('user_id', auth()->id())
-                    ->where('booking_for_type', 'course')
-                    ->where('booking_for_id', $course->id)
-                    ->exists();
+              $hasBooking = \App\Models\Booking::where('user_id', auth()->id())
+                ->where('booking_for_type', 'course')
+                ->where('booking_for_id', $course->id)
+                ->exists();
 
-                $courseEnded = \Carbon\Carbon::parse(
-                    optional($course->sessions->sortByDesc('end_date')->first())->end_date
-                )->isPast();
+
+                    $courseEnded = \Carbon\Carbon::parse(
+                   optional($course->sessions->sortByDesc('created_at')->first())->end_date
+                    )->isPast();
+
 
                 $alreadyReviewed = auth()->user()->reviews()->where('course_id', $course->id)->exists();
             @endphp
@@ -448,37 +575,6 @@
             </div>
         </div>
     </div>
-
-    <style>
-        /* Right-to-Left Stars Rating Style */
-        .rating-input.rtl-stars {
-            display: flex;
-            direction: rtl;
-            unicode-bidi: bidi-override;
-            gap: 5px;
-        }
-        .rating-input.rtl-stars input[type="radio"] {
-            display: none;
-        }
-        .rating-input.rtl-stars label {
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: #ddd;
-            transition: color 0.2s;
-        }
-        .rating-input.rtl-stars input[type="radio"]:checked ~ label {
-            color: #ffc107;
-        }
-        .rating-input.rtl-stars label:hover,
-        .rating-input.rtl-stars label:hover ~ label {
-            color: #ffc107;
-        }
-        .rtl-stars {
-            font-size: 1.2rem;
-            direction: rtl;
-            unicode-bidi: bidi-override;
-        }
-    </style>
     @endauth
 </div>
 @endsection

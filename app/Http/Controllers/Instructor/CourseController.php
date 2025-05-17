@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\User; 
 use Illuminate\Http\Request;
 use App\Models\Enrollment;
+use Illuminate\Support\Facades\Log;
 
 class CourseController extends Controller
 {
@@ -40,7 +41,7 @@ class CourseController extends Controller
     
         $session = $course->sessions->first();
     
-        return view('courses.show', compact('course', 'session'));
+        return view('instructor.courses.show', compact('course', 'session'));
     }
     
     
@@ -53,6 +54,8 @@ class CourseController extends Controller
     }
     public function store(Request $request)
     {
+        Log::info('Received request data for creating course', $request->all());
+    
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -63,19 +66,30 @@ class CourseController extends Controller
             'seats_available' => 'required|integer|min:0',
         ]);
     
+        Log::info('Validation passed for course creation', $validated);
+    
         $validated['instructor_id'] = auth()->user()->id;
     
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('courses', 'public');
-            $validated['image'] = basename($path); 
+            $validated['image'] = basename($path);
+            Log::info('Image uploaded successfully', ['image_path' => $path]);
+        } else {
+            Log::info('No image uploaded');
         }
     
-        Course::create($validated);
-    
-        session()->flash('success', '✅ Course created successfully!');
-        return redirect()->route('instructor.courses.index');
+        try {
+            Course::create($validated);
+            Log::info('Course created successfully', ['course_data' => $validated]);
+            
+            session()->flash('success', '✅ Course created successfully!');
+            return redirect()->route('instructor.courses.index');
+        } catch (\Exception $e) {
+            Log::error('Error creating course', ['error' => $e->getMessage()]);
+            session()->flash('error', '❌ Failed to create course. Please try again.');
+            return redirect()->route('instructor.courses.index');
+        }
     }
-    
     
     public function edit($id)
     {

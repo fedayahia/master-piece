@@ -141,7 +141,7 @@
 <div class="container">
     <h2>Add New Course Session</h2>
 
-    <form action="{{ route('admin.course-sessions.store') }}" method="POST">
+    <form action="{{ route('instructor.course_sessions.store') }}" method="POST">
         @csrf
 
         <div class="form-grid">

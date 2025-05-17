@@ -91,4 +91,15 @@ public function joinedLiveSessions()
 }
 
 
+public function courseReviews()
+{
+    return $this->hasManyThrough(
+        \App\Models\Review::class,
+        \App\Models\Course::class,
+        'instructor_id',
+        'course_id',    
+        'id',          
+        'id'            
+    );
+}
 }

@@ -225,7 +225,14 @@ h6,
         opacity: 0;
     }
 }
+#userDropdown {
+    border-width: 0.5px !important;
+    transition: all 0.3s ease;
+}
 
+#userDropdown:hover {
+    border-width: 1px !important;
+}
 /* .dropdown .dropdown-menu a:hover {
     background: var(--bs-secondary);
     color: var(--bs-primary);

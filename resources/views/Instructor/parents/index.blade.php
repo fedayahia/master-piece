@@ -388,6 +388,22 @@
             height: 45px;
         }
     }
+    .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; 
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; 
+}
+
+.contact-item i {
+    width: 1rem; 
+    text-align: center;
+}
     </style>
 <div class="parents-dashboard">
     <div class="dashboard-header">
@@ -445,9 +461,15 @@
                                 <div class="parent-details">
                                     <div class="parent-name">{{ $booking->user_name }}</div>
                                     <div class="parent-contact">
-                                        <div class="contact-item">
-                                            <i class="fas fa-envelope"></i>
-                                            <span>{{ $booking->user_email }}</span>
+                                        <div class="contact-info">
+                                            <div class="contact-item">
+                                                <i class="fas fa-envelope"></i>
+                                                <span>{{ $booking->user_email }}</span>
+                                            </div>
+                                            <div class="contact-item">
+                                                <i class="fas fa-phone"></i>
+                                                <span>{{ $booking->phone }}</span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="booking-date">
@@ -466,7 +488,6 @@
             </div>
         @endif
 
-        <!-- قسم الجلسات الخاصة -->
         @if($sessionBookings->isNotEmpty())
             <div class="section-title session">
                 <i class="fas fa-calendar-check"></i> Parents in Private Sessions
@@ -492,9 +513,15 @@
                                 <div class="parent-details">
                                     <div class="parent-name">{{ $booking->user_name }}</div>
                                     <div class="parent-contact">
-                                        <div class="contact-item">
-                                            <i class="fas fa-envelope"></i>
-                                            <span>{{ $booking->user_email }}</span>
+                                        <div class="contact-info">
+                                            <div class="contact-item">
+                                                <i class="fas fa-envelope"></i>
+                                                <span>{{ $booking->user_email }}</span>
+                                            </div>
+                                            <div class="contact-item">
+                                                <i class="fas fa-phone"></i>
+                                                <span>{{ $booking->phone }}</span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="booking-date">

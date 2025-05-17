@@ -42,7 +42,7 @@
 
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                    <label for="name"><i class="fas fa-user"></i>  Name</label>
                     <input type="text" name="full_name" value="{{ old('full_name', auth()->user()->name) }}" required>
                 </div>
 

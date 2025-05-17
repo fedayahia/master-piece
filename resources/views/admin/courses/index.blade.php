@@ -310,10 +310,12 @@
                 <select name="category" class="form-control">
                     <option value="">All Categories</option>
                     <option value="Newborn Care" {{ request('category') == 'Newborn Care' ? 'selected' : '' }}>Newborn Care</option>
-                    <option value="Positive Parenting" {{ request('category') == 'Positive Parenting' ? 'selected' : '' }}>Positive Parenting</option>
-                    <option value="Mother and Child Health" {{ request('category') == 'Mother and Child Health' ? 'selected' : '' }}>Mother and Child Health</option>
-                    <option value="Child First Aid" {{ request('category') == 'Child First Aid' ? 'selected' : '' }}>Child First Aid</option>
-                    <option value="Family Communication" {{ request('category') == 'Family Communication' ? 'selected' : '' }}>Family Communication</option>
+                    <option value="Child Safety" {{ request('category') == 'Child Safety' ? 'selected' : '' }}>Child Safety</option>
+                    <option value="Sleep Training" {{ request('category') == 'Sleep Training' ? 'selected' : '' }}>Sleep Training</option>
+                    <option value="Breastfeeding" {{ request('category') == 'Breastfeeding' ? 'selected' : '' }}>Breastfeeding</option>
+                    <option value="Parenting Skills" {{ request('category') == 'Parenting Skills' ? 'selected' : '' }}>Parenting Skills</option>
+                    <option value="General Parenting" {{ request('category') == 'General Parenting' ? 'selected' : '' }}>General Parenting</option>
+                    
                 </select>
             </div>
         

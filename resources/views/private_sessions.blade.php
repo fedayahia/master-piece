@@ -65,16 +65,76 @@
             @endforeach
 
           
-            <!-- Pagination -->
-            <div class="d-inline-block text-center wow fadeIn" data-wow-delay="0.1s" style="margin-top: 50px;">
-                {{-- {{ $privateSessions->links() }} <!-- Pagination links --> --}}
-            </div>
+       <!-- Pagination -->
+<div class="d-flex justify-content-center wow fadeIn" data-wow-delay="0.1s" style="margin-top: 50px;">
+    <nav aria-label="Page navigation">
+        <ul class="pagination flex-wrap justify-content-center mb-0">
+            {{-- Previous Page Link --}}
+            @if ($sessions->onFirstPage())
+                <li class="page-item disabled">
+                    <span class="page-link px-3 py-2 rounded-start">&lsaquo;</span>
+                </li>
+            @else
+                <li class="page-item">
+                    <a class="page-link px-3 py-2 rounded-start" href="{{ $sessions->previousPageUrl() }}" rel="prev">&lsaquo;</a>
+                </li>
+            @endif
 
-            <div class="col-12 mt-5 wow fadeIn" data-wow-delay="0.3s">
-                <nav aria-label="Page navigation">
-                    {{ $sessions->links('pagination::bootstrap-5') }}
-                </nav>
-            </div>
+            {{-- Pagination Elements --}}
+            @php
+                $current = $sessions->currentPage();
+                $last = $sessions->lastPage();
+                $start = max($current - 2, 1);
+                $end = min($current + 2, $last);
+            @endphp
+
+            @if($start > 1)
+                <li class="page-item">
+                    <a class="page-link px-3 py-2" href="{{ $sessions->url(1) }}">1</a>
+                </li>
+                @if($start > 2)
+                    <li class="page-item disabled d-none d-sm-block">
+                        <span class="page-link px-3 py-2">...</span>
+                    </li>
+                @endif
+            @endif
+
+            @for ($i = $start; $i <= $end; $i++)
+                @if ($i == $current)
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link px-3 py-2">{{ $i }}</span>
+                    </li>
+                @else
+                    <li class="page-item">
+                        <a class="page-link px-3 py-2" href="{{ $sessions->url($i) }}">{{ $i }}</a>
+                    </li>
+                @endif
+            @endfor
+
+            @if($end < $last)
+                @if($end < $last - 1)
+                    <li class="page-item disabled d-none d-sm-block">
+                        <span class="page-link px-3 py-2">...</span>
+                    </li>
+                @endif
+                <li class="page-item">
+                    <a class="page-link px-3 py-2" href="{{ $sessions->url($last) }}">{{ $last }}</a>
+                </li>
+            @endif
+
+            {{-- Next Page Link --}}
+            @if ($sessions->hasMorePages())
+                <li class="page-item">
+                    <a class="page-link px-3 py-2 rounded-end" href="{{ $sessions->nextPageUrl() }}" rel="next">&rsaquo;</a>
+                </li>
+            @else
+                <li class="page-item disabled">
+                    <span class="page-link px-3 py-2 rounded-end">&rsaquo;</span>
+                </li>
+            @endif
+        </ul>
+    </nav>
+</div>
         </div> <!-- Close the row here -->
     </div>
 </div>

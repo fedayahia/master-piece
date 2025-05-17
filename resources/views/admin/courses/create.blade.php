@@ -2,6 +2,26 @@
 
 @section('content')
 <style>
+    /* Toggle Switch Styles */
+.form-switch .form-check-input {
+    width: 3em;
+    height: 1.5em;
+    margin-right: 0.5rem;
+    background-color: #dee2e6;
+    border-color: #dee2e6;
+}
+
+.form-switch .form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.form-switch .form-check-label {
+    font-weight: 500;
+    color: var(--dark);
+    cursor: pointer;
+    padding: 5px 30px ;
+}
     /* Main Container */
     .container {
         background-color: white;
@@ -220,23 +240,24 @@ textarea.form-control {
                     @enderror
                 </div>
             </div>
-            
             <div class="form-group">
                 <label for="category">Category</label>
                 <select name="category" id="category" class="form-control @error('category') is-invalid @enderror">
                     <option value="">Select Category</option>
                     <option value="Newborn Care" {{ old('category') == 'Newborn Care' ? 'selected' : '' }}>Newborn Care</option>
-                    <option value="Positive Parenting" {{ old('category') == 'Positive Parenting' ? 'selected' : '' }}>Positive Parenting</option>
-                    <option value="Mother and Child Health" {{ old('category') == 'Mother and Child Health' ? 'selected' : '' }}>Mother and Child Health</option>
-                    <option value="Child First Aid" {{ old('category') == 'Child First Aid' ? 'selected' : '' }}>Child First Aid</option>
-                    <option value="Family Communication" {{ old('category') == 'Family Communication' ? 'selected' : '' }}>Family Communication</option>
-                </select>
+                    <option value="Child Safety" {{ old('category') == 'Child Safety' ? 'selected' : '' }}>Child Safety</option>
+                    <option value="Sleep Training" {{ old('category') == 'Sleep Training' ? 'selected' : '' }}>Sleep Training</option>
+                    <option value="Breastfeeding" {{ old('category') == 'Breastfeeding' ? 'selected' : '' }}>Breastfeeding</option>
+                    <option value="Parenting Skills" {{ old('category') == 'Parenting Skills' ? 'selected' : '' }}>Parenting Skills</option>
+                    <option value="General Parenting" {{ old('category') == 'General Parenting' ? 'selected' : '' }}>General Parenting</option>
+                </select>                
                 @error('category')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                 @enderror
             </div>
+            
         </div>
 
         <!-- Media & Availability Section -->
@@ -272,7 +293,18 @@ textarea.form-control {
                 </div>
             </div>
         </div>
-
+        <div class="form-group">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" name="is_online" id="is_online" 
+                       value="1" {{ old('is_online') ? 'checked' : '' }}>
+                <label class="form-check-label" for="is_online">Online Course</label>
+            </div>
+            @error('is_online')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
         <!-- Submit Button -->
         <div class="form-group text-end">
             <button type="submit" class="btn btn-primary">

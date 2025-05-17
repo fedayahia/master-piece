@@ -19,6 +19,6 @@ class ReviewController extends Controller
         $review = Review::findOrFail($id);
         $review->delete();
 
-        return redirect()->route('admin.reviews.index')->with('success', '❌ Review deleted successfully!');
+        return redirect()->route('admin.reviews.index')->with('success', ' Review deleted successfully!');
     }
 }

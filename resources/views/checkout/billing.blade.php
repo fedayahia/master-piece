@@ -197,38 +197,55 @@
                                 @endif
                             @endif
                             
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Full Name</label>
-                                        <input type="text" name="billing_name" class="form-control" 
-                                               value="{{ auth()->user()->name }}" required>
+                            <!-- User Information (Display Only) -->
+                            <div class="user-info-section mb-4">
+                                <h6 class="text-muted mb-3">Your Information</h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Full Name</label>
+                                            <div class="form-control-plaintext bg-light p-3 rounded">
+                                                {{ auth()->user()->name }}
+                                            </div>
+                                            <input type="hidden" name="billing_name" value="{{ auth()->user()->name }}">
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <div class="form-control-plaintext bg-light p-3 rounded">
+                                                {{ auth()->user()->email }}
+                                            </div>
+                                            <input type="hidden" name="billing_email" value="{{ auth()->user()->email }}">
+                                        </div>
                                     </div>
                                     
-                                    <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" name="billing_email" class="form-control"
-                                               value="{{ auth()->user()->email }}" required>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Phone Number</label>
-                                        <input type="tel" name="billing_phone" class="form-control"
-                                               value="{{ auth()->user()->phone_number ?? '' }}" required
-                                               pattern="[0-9]{10,15}">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone Number</label>
+                                            <div class="form-control-plaintext bg-light p-3 rounded">
+                                                {{ auth()->user()->phone_number ?? 'Not provided' }}
+                                            </div>
+                                            <input type="hidden" name="billing_phone" value="{{ auth()->user()->phone_number ?? '' }}">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
+            
+                            <!-- Editable Fields (if any) would go here -->
+                            
+                            <div class="alert alert-info mt-4">
+                                <i class="fas fa-info-circle me-2"></i>
+                                To update your personal information, please visit your 
+                                <a href="{{ route('user.edit') }}" class="alert-link">profile settings</a>.
+                            </div>
+            
                             <button type="submit" class="btn btn-primar mt-3 w-100">
                                 Continue to Payment
                             </button>
                         </form>
                     </div>
                 </div>
-            </div>
+            </div>          
             
             <!-- Booking Summary -->
             <div class="col-lg-5">
@@ -405,10 +422,8 @@ document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('billing-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    // جمع بيانات الفاتورة
     const formData = new FormData(this);
     
-    // إرسال البيانات عبر AJAX
     fetch(this.action, {
         method: 'POST',
         body: formData,
@@ -420,7 +435,6 @@ document.getElementById('billing-form').addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // الانتقال إلى صفحة الدفع
             window.location.href = "{{ route('checkout.payment') }}";
         } else {
             alert(data.message || 'Error processing billing information');

@@ -37,15 +37,18 @@ class AvailableTimeController extends Controller
         return redirect()->route('instructor.available_times.index')
                ->with('success', 'Time slot deleted successfully!');
     }
-    
     public function create()
-    {
-        $privateSessions = PrivateSession::with('user') // Eager load user
-            ->where('instructor_id', auth()->id()) // Or your condition
-            ->get();
+    {$privateSessions = PrivateSession::with('user')->where('instructor_id', auth()->id())->get();
+
+        
     
-        return view('instructor.available_times.create', compact('privateSessions'));
+            $availableTimes = AvailableTime::whereHas('privateSession', function ($query) {
+                $query->where('instructor_id', auth()->id());
+            })->get();
+                
+        return view('instructor.available_times.create', compact('privateSessions', 'availableTimes'));
     }
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -53,21 +56,23 @@ class AvailableTimeController extends Controller
                 'required',
                 'date_format:Y-m-d\TH:i',
                 function ($attribute, $value, $fail) {
-                    $exists = AvailableTime::where('available_date', $value)->exists();
-                    if ($exists) {
+                    if (AvailableTime::where('available_date', $value)->exists()) {
                         $fail('This time slot already exists.');
+                    }
+        
+                    if (now()->gt(\Carbon\Carbon::parse($value))) {
+                        $fail('You cannot select a past date and time.');
                     }
                 }
             ],
             'private_session_id' => [
-                'nullable',
                 'exists:private_sessions,id',
                 function ($attribute, $value, $fail) use ($request) {
                     if ($value) {
                         $exists = AvailableTime::where('private_session_id', $value)
                             ->where('available_date', $request->available_date)
                             ->exists();
-                        
+        
                         if ($exists) {
                             $fail('This private session already has the same date and time.');
                         }
@@ -75,7 +80,7 @@ class AvailableTimeController extends Controller
                 }
             ],
         ]);
-    
+        
         AvailableTime::create([
             'available_date' => $validated['available_date'],
             'private_session_id' => $validated['private_session_id'],

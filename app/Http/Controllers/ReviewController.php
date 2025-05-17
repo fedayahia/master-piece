@@ -12,51 +12,33 @@ class ReviewController extends Controller
 {
     public function store(Request $request)
     {
-        // Validate the incoming request data
         $request->validate([
             'course_id' => 'required|exists:courses,id',
             'rating' => 'required|integer|between:1,5',
             'comment' => 'required|string|max:500'
         ]);
-
+    
         $user = auth()->user();
-        $course = Course::find($request->course_id);
-
-        // 1. Ensure the user has booked the course
-        if (!$user->bookings()->where('course_id', $course->id)->exists()) {
+        $course = Course::findOrFail($request->course_id);
+    
+        $hasBooking = $user->bookings()
+            ->where('booking_for_type', 'course')
+            ->where('booking_for_id', $course->id)
+            ->exists();
+    
+        if (!$hasBooking) {
             return back()->with('error', 'You must book this course before submitting a review.');
         }
-
-        // 2. Prevent the user from reviewing the same course more than once
-        if ($user->reviews()->where('course_id', $course->id)->exists()) {
-            return back()->with('error', 'You have already reviewed this course.');
-        }
-
-        // 3. Ensure all course sessions have ended before allowing a review
-        $hasUpcomingSessions = CourseSession::where('course_id', $course->id)
-            ->where('end_date', '>', now())
-            ->exists();
-
-        if ($hasUpcomingSessions) {
-            return back()
-                ->with('error', 'You cannot review the course before all sessions have ended.')
-                ->withInput();
-        }
-
-        // Create the review
-        $review = $user->reviews()->create([
+    
+        $user->reviews()->create([
             'course_id' => $course->id,
             'rating' => $request->rating,
-            'comment' => $request->comment
+            'comment' => $request->comment,
         ]);
-
-        // Update the course's average rating
-        $this->updateCourseRating($course);
-
-        return back()
-            ->with('success', 'Thank you for reviewing the course!')
-            ->with('scroll_to', 'reviews-section');
+    
+        return back()->with('success', 'Your review has been submitted successfully.');
     }
+    
 
     protected function updateCourseRating(Course $course)
     {

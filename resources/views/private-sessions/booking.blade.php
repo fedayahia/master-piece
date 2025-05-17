@@ -38,7 +38,7 @@
                         </div>
                         <div>
                             <h6 class="mb-0 fw-semibold">Duration</h6>
-                            <p class="text-muted mb-0">{{ $session->duration }} hours</p>
+                            <p class="text-muted mb-0">{{ $session->duration }} Minutes</p>
                         </div>
                     </div>
                     

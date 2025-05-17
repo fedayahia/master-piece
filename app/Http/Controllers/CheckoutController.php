@@ -136,7 +136,7 @@ class CheckoutController extends Controller
     
         if (!session('billing_completed')) {
             return redirect()->route('courses.index')
-                   ->with('error', 'يرجى إكمال معلومات الفاتورة أولاً!');
+                   ->with('error', 'Please complete the billing information first!');
         }
     
         $itemId = session('item_id');
@@ -148,7 +148,7 @@ class CheckoutController extends Controller
     
         if (!$item) {
             return redirect()->route('courses.index')
-                   ->with('error', 'العنصر المطلوب غير موجود!');
+                   ->with('error', 'The selected item was not found!');
         }
     
         $price = session('item_price', 0);
@@ -161,41 +161,40 @@ class CheckoutController extends Controller
         ]);
     }
     
+    
 
   
     
-    public function complete()
-    {
-        // التحقق من وجود حجز مكتمل
-        if (!session('current_booking_id')) {
-            return redirect()->route('courses.index')
-                   ->with('error', 'No completed booking found');
-        }
+    // public function complete()
+    // {
+    //     if (!session('current_booking_id')) {
+    //         return redirect()->route('courses.index')
+    //                ->with('error', 'No completed booking found');
+    //     }
     
-        $booking = Booking::with('course')->findOrFail(session('current_booking_id'));
+    //     $booking = Booking::with('course')->findOrFail(session('current_booking_id'));
         
-        // تنظيف الجلسة
-        session()->forget([
-            'current_booking_id',
-            'course_id',
-            'course_title',
-            'course_price',
-            'billing_details',
-            'billing_completed',
-            'applied_coupon',
-            'coupon_discount'
-        ]);
+    //     session()->forget([
+    //         'current_booking_id',
+    //         'course_id',
+    //         'course_title',
+    //         'course_price',
+    //         'billing_details',
+    //         'billing_completed',
+    //         'applied_coupon',
+    //         'coupon_discount'
+    //     ]);
         
-        return view('checkout.complete', compact('booking'));
-    }
+    //     return view('checkout.complete', compact('booking'));
+    // }
 
 
-    public function scopeValidFor($query, $item)
-    {
-        return $query->where('applicable_type', get_class($item))  // تأكد من استخدام الكلاس الصحيح
-                     ->where('applicable_id', $item->id)
-                     ->where('status', 'active');
-    }
+    // public function scopeValidFor($query, $item)
+    // {
+    //     return $query->where('applicable_type', get_class($item))  
+    //                  ->where('applicable_id', $item->id)
+    //                  ->where('status', 'active');
+    // }
     
     public function applyCoupon(Request $request)
     {
@@ -270,13 +269,13 @@ class CheckoutController extends Controller
         ]);
     }
     
-private function calculateTotalAmount(Course $course)
-{
-    $coursePrice = session('course_price', $course->price);
-    $discount = session('coupon_discount', 0);
+// private function calculateTotalAmount(Course $course)
+// {
+//     $coursePrice = session('course_price', $course->price);
+//     $discount = session('coupon_discount', 0);
     
-    return max($coursePrice - $discount, 0);
-}
+//     return max($coursePrice - $discount, 0);
+// }
 public function handleStripe(Request $request)
 {
     if (!session()->has('item_id') || !session()->has('booking_type')) {
@@ -288,7 +287,6 @@ public function handleStripe(Request $request)
     $totalAmount = session('item_price') - (session('coupon_discount') ?? 0);
     $currentBooking = session('current_booking');
 
-    // تسجيل بيانات الجلسة للتحقق
     \Log::info('Session data:', [
         'item_id' => $itemId,
         'booking_type' => $bookingType,
@@ -308,67 +306,67 @@ public function handleStripe(Request $request)
         \DB::beginTransaction();
         \Log::info('Database transaction started');
 
-        // تعريف أنواع الحجوزات المسموحة
         $validBookingTypes = [
             'private' => [
-                'model' => 'PrivateSession', // حفظ النوع فقط
+                'model' => 'PrivateSession',
                 'require_time' => true
             ],
             'course' => [
-                'model' => 'Course', // حفظ النوع فقط
+                'model' => 'Course',
                 'require_time' => false
             ]
         ];
 
-        // التحقق من نوع الحجز
         if (!array_key_exists($bookingType, $validBookingTypes)) {
             throw new \Exception('Invalid booking type: ' . $bookingType);
         }
 
         $bookingConfig = $validBookingTypes[$bookingType];
-        $bookingForType = $bookingConfig['model'];  // حفظ النوع فقط
+        $bookingForType = $bookingConfig['model'];
         $bookingForId = $itemId;
         $availableTime = null;
 
-        // معالجة الجلسات الخاصة
+        $existingBooking = \App\Models\Booking::where('user_id', auth()->id())
+            ->where('booking_for_id', $itemId)
+            ->where('booking_for_type', $bookingForType)
+            ->first();
+
+        if ($existingBooking) {
+            throw new \Exception('You have already booked this session.');
+        }
+
         if ($bookingType === 'private') {
             if (empty($currentBooking['available_time_id'])) {
                 throw new \Exception('Time slot is required for private sessions');
             }
 
             $availableTime = \App\Models\AvailableTime::findOrFail($currentBooking['available_time_id']);
-            $bookingForId = $currentBooking['available_time_id'];
 
-            // تأكد من أن الوقت المتاح ليس محجوزاً بالفعل
             if ($availableTime->is_available == false) {
                 throw new \Exception('Time slot is no longer available');
             }
 
-            // تحديث حالة الوقت للجلسات الخاصة
             $availableTime->update(['is_available' => false]);
 
             \Log::info('Time slot marked as unavailable', ['id' => $availableTime->id]);
         }
 
-        // إنشاء بيانات الحجز
         $bookingData = [
             'user_id' => auth()->id(),
-            'booking_for_type' => $bookingForType,  // حفظ النوع فقط
+            'booking_for_type' => $bookingForType,
             'booking_for_id' => $bookingForId,
             'status' => 'enrolled',
             'seat_number' => 'BOOK-' . strtoupper(Str::random(8)),
         ];
 
-        // إضافة بيانات الوقت للجلسات الخاصة
         if ($availableTime) {
             $bookingData['available_time_id'] = $availableTime->id;
-            $bookingData['booking_date'] = $availableTime->available_date;
+            $bookingData['booking_date'] = now()->toDateString();
         }
 
         $booking = Booking::create($bookingData);
         \Log::info('Booking created', ['id' => $booking->id]);
 
-        // تحديث الكورس لتقليل عدد المقاعد المتاحة
         if ($bookingForType === 'Course') {
             $course = \App\Models\Course::findOrFail($bookingForId);
             if ($course->seats_available > 0) {
@@ -379,13 +377,13 @@ public function handleStripe(Request $request)
             }
         }
 
-        // تسجيل الدفع
         Payment::create([
             'method' => 'stripe',
             'user_id' => auth()->id(),
-            'payment_for_type' => $bookingForType,  // حفظ النوع فقط
+            'payment_for_type' => $bookingForType,
             'payment_for_id' => $bookingForId,
             'amount' => $totalAmount,
+            'status' => 'completed',
             'booking_id' => $booking->id,
             'transaction_id' => $charge->id,
             'paid_at' => now()
@@ -394,7 +392,6 @@ public function handleStripe(Request $request)
         \DB::commit();
         \Log::info('Transaction committed successfully');
 
-        // تنظيف الجلسة
         session()->forget([
             'current_booking',
             'coupon_discount',
@@ -415,78 +412,65 @@ public function handleStripe(Request $request)
 }
 
 
-// دالة لمعالجة الدفع الناجح
-private function processSuccessfulPayment($charge, $course)
-{
-    \DB::transaction(function () use ($charge, $course) {
-        // سجّل تفاصيل الدفع
-        Log::info("Processing payment for course: " . $course->title);
+// private function processSuccessfulPayment($charge, $course)
+// {
+//     \DB::transaction(function () use ($charge, $course) {
+//         Log::info("Processing payment for course: " . $course->title);
 
-        // إنشاء الحجز
-        $booking = $this->createBooking($course);
+//         $booking = $this->createBooking($course);
 
-        // سجّل الحجز الذي تم إنشاؤه
-        Log::info("Booking created with ID: " . $booking->id);
+//         Log::info("Booking created with ID: " . $booking->id);
 
-        // إنشاء الدفع
-        Payment::create([
-            'method' => 'credit_card',
-            'payment_date' => now(),
-            'user_id' => auth()->id(),
-            'payment_for_type' => 'Course',  // تحديد نوع الدفع كـ 'Course'
-            'payment_for_id' => $course->id,
-            'amount' => $this->calculateTotalAmount($course),
-            'booking_id' => $booking->id,
-            'payment_method' => 'credit_card',
-            'status' => 'completed',
-            'transaction_id' => $charge->id,
-            'paid_at' => now(),
-        ]);
+//         Payment::create([
+//             'method' => 'credit_card',
+//             'payment_date' => now(),
+//             'user_id' => auth()->id(),
+//             'payment_for_type' => 'Course',  
+//             'payment_for_id' => $course->id,
+//             'amount' => $this->calculateTotalAmount($course),
+//             'booking_id' => $booking->id,
+//             'payment_method' => 'credit_card',
+//             'status' => 'completed',
+//             'transaction_id' => $charge->id,
+//             'paid_at' => now(),
+//         ]);
 
-        // تقليص عدد المقاعد المتاحة
-        $course->decrement('seats_available');
-        $course->save();
+//         $course->decrement('seats_available');
+//         $course->save();
 
-        // حفظ ID الحجز في الجلسة
-        session(['current_booking_id' => $booking->id]);
+//         session(['current_booking_id' => $booking->id]);
 
-        // حفظ رابط الإيصال
-        $this->receiptUrl = $charge->receipt_url;
+//         $this->receiptUrl = $charge->receipt_url;
 
-        // سجّل نجاح عملية الدفع
-        Log::info("Payment completed successfully for course: " . $course->title);
-        Log::info("Transaction ID: " . $charge->id);
-        Log::info("Receipt URL: " . $this->receiptUrl);
-    });
+//         Log::info("Payment completed successfully for course: " . $course->title);
+//         Log::info("Transaction ID: " . $charge->id);
+//         Log::info("Receipt URL: " . $this->receiptUrl);
+//     });
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Payment successful!',
-        'booking_id' => session('current_booking_id'),
-        'receipt_url' => $this->receiptUrl
-    ]);
-}
+//     return response()->json([
+//         'success' => true,
+//         'message' => 'Payment successful!',
+//         'booking_id' => session('current_booking_id'),
+//         'receipt_url' => $this->receiptUrl
+//     ]);
+// }
 
-// دالة لمعالجة الأخطاء و إضافة سجلات عند حدوث أخطاء في الدفع
-private function getFriendlyErrorMessage(\Exception $e)
-{
-    // إذا كانت هناك مشكلة في بطاقة الدفع
-    if ($e instanceof \Stripe\Exception\CardException) {
-        $errorMessage = 'Card payment failed: ' . $e->getError()->message;
-        Log::error("Card payment failed: " . $errorMessage);
-        return $errorMessage;
-    }
+// private function getFriendlyErrorMessage(\Exception $e)
+// {
+//     if ($e instanceof \Stripe\Exception\CardException) {
+//         $errorMessage = 'Card payment failed: ' . $e->getError()->message;
+//         Log::error("Card payment failed: " . $errorMessage);
+//         return $errorMessage;
+//     }
 
-    // إذا كانت هناك مشكلة في الاتصال بـ Stripe
-    if (str_contains($e->getMessage(), 'Could not connect to Stripe')) {
-        $errorMessage = 'Could not connect to payment service. Please try again later.';
-        Log::error($errorMessage);
-        return $errorMessage;
-    }
+//     if (str_contains($e->getMessage(), 'Could not connect to Stripe')) {
+//         $errorMessage = 'Could not connect to payment service. Please try again later.';
+//         Log::error($errorMessage);
+//         return $errorMessage;
+//     }
 
-    // إذا كان هناك خطأ عام
-    Log::error("Unexpected payment error: " . $e->getMessage());
-    return 'An unexpected error occurred during payment processing.';
-}
+//     Log::error("Unexpected payment error: " . $e->getMessage());
+//     return 'An unexpected error occurred during payment processing.';
+// }
 
 }

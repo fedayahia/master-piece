@@ -21,7 +21,7 @@
         @csrf 
 
         {{-- Full Name --}}
-        <label for="name">Full Name:</label>
+        <label for="name"> Name:</label>
         <input type="text" id="name" name="name" value="{{ old('name') }}" required>
         @error('name')
             <div class="text-danger">{{ $message }}</div>

@@ -34,9 +34,11 @@ class CourseSession extends Model
     
     public $timestamps = true;
 
-public function bookings(): MorphMany
+
+
+public function bookings()
 {
-    return $this->morphMany(\App\Models\Booking::class, 'booking_for');
+    return $this->hasMany(Booking::class, 'booking_for_id')->where('booking_for_type', self::class);
 }
 
 }

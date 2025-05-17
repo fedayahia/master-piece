@@ -4,6 +4,63 @@
 
 @section('content')
 <style>
+    /* Pagination Styles */
+/* Pagination Styles */
+.pagination {
+    gap: 10px;
+}
+
+.page-item .page-link {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    color: var(--primary);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.page-item .page-link:hover {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(108, 92, 231, 0.2);
+}
+
+.page-item.disabled .page-link {
+    color: #b0b0b0;
+    background-color: #f8f9fa;
+    border-color: #e0e0e0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.page-item.active .page-link {
+    background-color: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Icons */
+.page-link i {
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .page-link {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .page-link i {
+        font-size: 0.8rem;
+    }
+}
     /* Main container styling */
     .container {
         background-color: white;
@@ -338,11 +395,40 @@
             </tbody>
         </table>
     </div>
-    
-    @if($sessions->hasPages())
-    <div class="d-flex justify-content-center mt-4">
-        {{ $sessions->links() }}
-    </div>
-    @endif
+    @if ($sessions->hasPages())
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-4">
+        {{-- Previous Page Link --}}
+        @if ($sessions->onFirstPage())
+            <li class="page-item disabled">
+                <span class="page-link">
+                    <i class="fas fa-chevron-left mr-1"></i> Previous
+                </span>
+            </li>
+        @else
+            <li class="page-item">
+                <a class="page-link" href="{{ $sessions->previousPageUrl() }}" rel="prev">
+                    <i class="fas fa-chevron-left mr-1"></i> Previous
+                </a>
+            </li>
+        @endif
+
+        {{-- Next Page Link --}}
+        @if ($sessions->hasMorePages())
+            <li class="page-item">
+                <a class="page-link" href="{{ $sessions->nextPageUrl() }}" rel="next">
+                    Next <i class="fas fa-chevron-right ml-1"></i>
+                </a>
+            </li>
+        @else
+            <li class="page-item disabled">
+                <span class="page-link">
+                    Next <i class="fas fa-chevron-right ml-1"></i>
+                </span>
+            </li>
+        @endif
+    </ul>
+</nav>
+@endif
 </div>
 @endsection

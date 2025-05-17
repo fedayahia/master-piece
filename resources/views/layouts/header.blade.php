@@ -116,6 +116,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a class="dropdown-item d-flex align-items-center text-primary small" href="{{ route('chat.index') }}">
+                                    <i class="fas fa-comments me-2"></i> Messages
+                                </a>
+                            </li>
+                            <li>
                                 <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                     @csrf
                                     <button type="submit" class="dropdown-item d-flex align-items-center text-danger small">
@@ -124,6 +129,7 @@
                                 </form>
                             </li>
                         </ul>
+                        
                     </div>
                     @endauth
                     

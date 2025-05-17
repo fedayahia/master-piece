@@ -2,97 +2,197 @@
 
 @section('content')
     <style>
-        /* Consistent styling with your other pages */
+        /* Main Container */
         .container {
             background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-top: 20px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-top: 25px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
+        /* Section Header */
         .section-header {
             color: var(--primary);
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             font-weight: 600;
-            border-bottom: 2px solid var(--secondary);
-            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-light);
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
+        .section-header h1 {
+            font-size: 1.75rem;
+            margin: 0;
+        }
+        
+        /* Form Elements */
         .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-control {
-            border-radius: 0.375rem;
-            border: 1px solid #d2d6da;
-            transition: all 0.2s ease;
-            padding: 0.75rem 1rem;
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.25);
+            margin-bottom: 1.75rem;
+            position: relative;
         }
         
         label {
             font-weight: 500;
             margin-bottom: 0.5rem;
             color: #495057;
+            display: block;
         }
         
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
+            outline: none;
+        }
+        
+        /* Select Dropdown Specific */
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%236e6e6e' stroke='%236e6e6e' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 14px 10px;
+            cursor: pointer;
+        }
+        
+        .form-select option {
+            padding: 10px 15px;
+            background: #fff;
+        }
+        
+        .form-select option:hover {
+            background-color: var(--primary-light) !important;
+            color: var(--primary-dark);
+        }
+        
+        .form-select option:checked {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+        
+        /* Placeholder styling */
+        .form-select option[disabled]:first-child {
+            color: #adb5bd;
+            font-style: italic;
+        }
+        
+        /* Buttons */
         .btn-create {
             background-color: var(--primary);
             border-color: var(--primary);
-            padding: 0.5rem 1.5rem;
+            padding: 0.75rem 2rem;
             font-weight: 500;
-            color: #ffffff;
+            color: white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .btn-create:hover {
-            background-color: var(--primary);
-            border-color: var(--primary);
-            color: #ffffff;
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-        /* Style for select dropdown */
-        .form-select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 16px 12px;
+        .btn-outline-secondary {
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        /* Responsive additions */
+        
+        .btn-outline-secondary:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-1px);
+        }
+        
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Helper Text */
+        .text-muted {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+            display: block;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 991.98px) {
+            .container {
+                padding: 25px;
+            }
+        }
+        
         @media (max-width: 767.98px) {
             .container {
-                padding: 15px;
+                padding: 20px;
+                margin-top: 15px;
             }
             
             .section-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
+                gap: 15px;
+                margin-bottom: 25px;
             }
             
             .form-group {
-                margin-bottom: 1rem;
+                margin-bottom: 1.5rem;
             }
             
             .form-control, .form-select {
-                padding: 0.65rem 0.75rem;
+                padding: 0.7rem 0.9rem;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: 10px;
             }
             
             .btn-create, .btn-outline-secondary {
                 width: 100%;
-                margin-bottom: 10px;
+                padding: 0.7rem;
+            }
+        }
+        
+        @media (max-width: 575.98px) {
+            .container {
+                padding: 15px;
+                border-radius: 8px;
             }
             
-            .form-actions {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
+            .section-header h1 {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -157,15 +257,14 @@
                         </select>
                     </div>
                 </div>
-          
             </div>
             
-            <div class="form-group mt-4 form-actions">
+            <div class="form-actions">
                 <button type="submit" class="btn btn-create">
-                    <i class="fas fa-save me-1"></i> Create User
+                    <i class="fas fa-save me-2"></i> Create User
                 </button>
                 <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary">
-                    Cancel
+                    <i class="fas fa-times me-2"></i> Cancel
                 </a>
             </div>
         </form>

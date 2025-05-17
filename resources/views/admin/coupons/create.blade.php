@@ -155,13 +155,7 @@
                    placeholder="Enter discount amount">
         </div>
 
-        <div class="form-group">
-            <label for="discount_type" class="form-label">Discount Type</label>
-            <select name="discount_type" class="form-select" required>
-                <option value="percentage">Percentage</option>
-                <option value="fixed">Fixed Amount</option>
-            </select>
-        </div>
+
 
   
 

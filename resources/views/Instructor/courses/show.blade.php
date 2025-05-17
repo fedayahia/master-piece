@@ -232,7 +232,20 @@
                 </span>
             </div>
             
-     
+            <div class="detail-item">
+                <span class="detail-label">Course Type:</span>
+                <span class="detail-value">
+                    @if($course->is_online)
+                        <span class="badge ">
+                            <i class="fas fa-laptop me-1"></i> Online Course
+                        </span>
+                    @else
+                        <span class="badge ">
+                            <i class="fas fa-user-friends me-1"></i> Offline Course
+                        </span>
+                    @endif
+                </span>
+            </div>
             
             <div class="detail-item">
                 <span class="detail-label">Created At:</span>

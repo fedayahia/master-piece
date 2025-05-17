@@ -25,7 +25,6 @@ class CourseSessionController extends Controller
     
         return view('admin.Course Sessions.index', compact('sessions'));
     }
-    
     public function show($id)
     {
         $session = CourseSession::with(['course', 'instructor'])->findOrFail($id);
@@ -46,8 +45,32 @@ class CourseSessionController extends Controller
             'user_id' => 'required|exists:users,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'start_date' => 'required|date|after_or_equal:today',
-            'end_date' => 'required|date|after:start_date',
+            'start_date' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    if (\Carbon\Carbon::parse($value)->lt(now())) {
+                        $fail('The start date must not be in the past.');
+                    }
+                }
+            ],
+            'end_date' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) use ($request) {
+                    $start = \Carbon\Carbon::parse($request->start_date);
+                    $end = \Carbon\Carbon::parse($value);
+        
+                    if ($end->lt(now())) {
+                        $fail('The end date must not be in the past.');
+                    }
+        
+                    if ($end->lte($start)) {
+                        $fail('The end date must be after the start date.');
+                    }
+                }
+            ],
+        
             'duration' => 'required|integer|min:1',
             'session_mode' => 'required|in:online,offline',
             'max_seats' => 'required|integer|min:1|max:100',

@@ -72,6 +72,9 @@ public function availableTimes()
     return $this->hasMany(AvailableTime::class);
 }
 
-
+public function scopeActive($query)
+{
+    return $query->where('status', 'active');
+}
 
 }
