@@ -38,10 +38,25 @@
                                 </div>
                             </div>
                             <div class="px-4 py-2 bg-secondary text-white text-center events-rate">{{ \Carbon\Carbon::parse($event->event_date)->format('d M') }}</div>
-                            <div class="d-flex justify-content-between px-4 py-2 bg-secondary">
-                                <small class="text-white"><i class="fas fa-calendar me-1 text-primary"></i> {{ \Carbon\Carbon::parse($event->event_date)->format('h:i A') }} - {{ \Carbon\Carbon::parse($event->event_date)->addHours(2)->format('h:i A') }}</small>
-                                <small class="text-white"><i class="fas fa-map-marker-alt me-1 text-primary"></i> {{ $event->is_online ? 'Online' : $event->location }}</small>
-                            </div>
+                            <div class="d-flex justify-content-between align-items-center px-4 py-2 bg-secondary" style="gap: 0.3rem;">
+                                <small class="text-white flex-grow-1 text-center">
+                                    <i class="fas fa-calendar me-1 text-primary"></i> 
+                                    {{ \Carbon\Carbon::parse($event->event_date)->format('h:i A') }} - {{ \Carbon\Carbon::parse($event->event_date)->addHours(2)->format('h:i A') }}
+                                </small>
+                                
+                                <div class="vr text-white opacity-100" style="height: 1.5rem;"></div>
+                                
+                                <small class="text-white flex-grow-1 text-center">
+                                    <i class="fas fa-map-marker-alt me-1 text-primary"></i> 
+                                    {{ $event->is_online ? 'Online' : $event->location }}
+                                </small>
+                                
+                                <div class="vr text-white opacity-100" style="height: 1.5rem;"></div>
+                                
+                                @if($event->is_free)
+                                <small class="text-white fw-bold flex-grow-1 text-center">Free</small>
+                                @endif
+                            </div>                          
                         </div>
                         <div class="events-text p-4 border border-primary bg-white border-top-0 rounded-bottom">
                             <a href="#" class="h4">{{ $event->title }}</a>

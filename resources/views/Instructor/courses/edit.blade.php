@@ -283,12 +283,16 @@
                 <label for="category">Category</label>
                 <select name="category" id="category" class="form-control @error('category') is-invalid @enderror">
                     <option value="">Select Category</option>
-                    <option value="Newborn Care" {{ old('category', $course->category) == 'Newborn Care' ? 'selected' : '' }}>Newborn Care</option>
-                    <option value="Child Safety" {{ old('category', $course->category) == 'Child Safety' ? 'selected' : '' }}>Child Safety</option>
-                    <option value="Sleep Training" {{ old('category', $course->category) == 'Sleep Training' ? 'selected' : '' }}>Sleep Training</option>
-                    <option value="Breastfeeding" {{ old('category', $course->category) == 'Breastfeeding' ? 'selected' : '' }}>Breastfeeding</option>
-                    <option value="Parenting Skills" {{ old('category', $course->category) == 'Parenting Skills' ? 'selected' : '' }}>Parenting Skills</option>
-                    <option value="General Parenting" {{ old('category', $course->category) == 'General Parenting' ? 'selected' : '' }}>General Parenting</option>
+                    <option value="Newborn Care" {{ old('category', $course->category ?? '') == 'Newborn Care' ? 'selected' : '' }}>Newborn Care</option>
+                    <option value="Child Safety" {{ old('category', $course->category ?? '') == 'Child Safety' ? 'selected' : '' }}>Child Safety</option>
+                    <option value="Sleep Training" {{ old('category', $course->category ?? '') == 'Sleep Training' ? 'selected' : '' }}>Sleep Training</option>
+                    <option value="Breastfeeding" {{ old('category', $course->category ?? '') == 'Breastfeeding' ? 'selected' : '' }}>Breastfeeding</option>
+                    <option value="Parenting Skills" {{ old('category', $course->category ?? '') == 'Parenting Skills' ? 'selected' : '' }}>Parenting Skills</option>
+                    <option value="General Parenting" {{ old('category', $course->category ?? '') == 'General Parenting' ? 'selected' : '' }}>General Parenting</option>
+                    <option value="Prenatal Care" {{ old('category', $course->category ?? '') == 'Prenatal Care' ? 'selected' : '' }}>Prenatal Care</option>
+                    <option value="Mental & Emotional Health" {{ old('category', $course->category ?? '') == 'Mental & Emotional Health' ? 'selected' : '' }}>Mental & Emotional Health</option>
+                    <option value="Parent-Child Relationship" {{ old('category', $course->category ?? '') == 'Parent-Child Relationship' ? 'selected' : '' }}>Parent-Child Relationship</option>
+                    <option value="Child Healthcare" {{ old('category', $course->category ?? '') == 'Child Healthcare' ? 'selected' : '' }}>Child Healthcare</option>
                 </select>
                 @error('category')
                     <span class="invalid-feedback" role="alert">

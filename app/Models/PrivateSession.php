@@ -17,6 +17,8 @@ class PrivateSession extends Model
         'duration',
         'price',
         'status',
+        'is_online',
+
     ];
     protected $table = 'private_sessions'; 
     public function coupons()

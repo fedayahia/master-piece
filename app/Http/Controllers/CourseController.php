@@ -23,6 +23,10 @@ class CourseController extends Controller
         'Breastfeeding',
         'Parenting Skills',
         'General Parenting',
+        'Prenatal Care',
+        'Mental & Emotional Health',
+        'Parent-Child Relationship',
+        'Child Healthcare'
     ];
     
     if ($request->filled('search')) {

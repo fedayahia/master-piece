@@ -139,7 +139,6 @@
         console.error('Stripe initialization error:', error);
     }
     document.addEventListener('DOMContentLoaded', function() {
-    // تطبيق الكوبون
     document.getElementById('apply_coupon').addEventListener('click', function() {
         const couponCode = document.getElementById('coupon_code').value;
         const courseId = {{ $item->id }};
@@ -177,16 +176,13 @@
         })
         .then(data => {
             if (data.success) {
-                // تحديث الواجهة
                 document.querySelector('.discount-row').style.display = '';
                 document.querySelector('.discount-amount').textContent = `- $${data.discount_amount}`;
                 document.querySelector('.total-amount').innerHTML = `$${data.total_amount}`;
                 
-                // إظهار رسالة النجاح
                 messageEl.textContent = 'Coupon applied successfully!';
                 messageEl.className = 'coupon-message success';
                 
-                // إعادة تحميل الصفحة بعد ثانية لتحديث الجلسة
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);

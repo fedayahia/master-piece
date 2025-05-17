@@ -315,7 +315,10 @@
                     <option value="Breastfeeding" {{ request('category') == 'Breastfeeding' ? 'selected' : '' }}>Breastfeeding</option>
                     <option value="Parenting Skills" {{ request('category') == 'Parenting Skills' ? 'selected' : '' }}>Parenting Skills</option>
                     <option value="General Parenting" {{ request('category') == 'General Parenting' ? 'selected' : '' }}>General Parenting</option>
-                    
+                    <option value="Prenatal Care" {{ request('category') == 'Prenatal Care' ? 'selected' : '' }}>Prenatal Care</option>
+                    <option value="Mental & Emotional Health" {{ request('category') == 'Mental & Emotional Health' ? 'selected' : '' }}>Mental & Emotional Health</option>
+                    <option value="Parent-Child Relationship" {{ request('category') == 'Parent-Child Relationship' ? 'selected' : '' }}>Parent-Child Relationship</option>
+                    <option value="Child Healthcare" {{ request('category') == 'Child Healthcare' ? 'selected' : '' }}>Child Healthcare</option>
                 </select>
             </div>
     

@@ -330,7 +330,8 @@
         </table>
     </div>
 
- 
+    {{ $payments->links('pagination::bootstrap-4') }}
+
 </div>
 
 <script>

@@ -150,7 +150,12 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb justify-content-center mb-0">
                 <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a> </li>
-                <li class="breadcrumb-item text-white" aria-current="page">Courses</li>
+                    @auth
+                    <li class="breadcrumb-item"><a  href="{{ route('user.profile') }}"> my Courses </a></li>
+                    @endauth
+                    <li class="breadcrumb-item text-white" aria-current="page">Courses</li>
+
+            </div>
             </ol>
         </nav>
     </div>

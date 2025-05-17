@@ -2,74 +2,77 @@
 
 @section('content')
 <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-5">
-        <h1 class="page-title">Session Details</h1>
-        <a href="{{ route('instructor.private-sessions.index') }}" class="btn btn-back">
-            <i class="fas fa-arrow-left me-2"></i> Back to Sessions
-        </a>
-    </div>
-
-    <div class="session-card">
-        <div class="session-card-body">
-            <div class="row g-4">
-                <!-- Session Image Column -->
-                <div class="col-lg-4">
-                    <div class="session-image-container">
-                        @if($privateSession->img)
-                            <img src="{{ asset('storage/private_sessions/'.$privateSession->img) }}" 
-                                 class="session-image" alt="{{ $privateSession->title }}">
-                        @else
-                            <div class="session-image-placeholder">
-                                <i class="fas fa-image"></i>
-                                <span>No Image Available</span>
-                            </div>
-                        @endif
-                    </div>
-                    
-               
-                </div>
-                
-                <!-- Session Details Column -->
-                <div class="col-lg-8">
-                    <div class="session-header">
-                        <h2 class="session-title">{{ $privateSession->title }}</h2>
-                        <div class="session-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-clock"></i>
-                                <span>{{ $privateSession->duration }} Hours</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-money-bill-wave"></i>
-                   <span>JOD{{ number_format($privateSession->price, 2) }} </span>
-                            </div>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h1 class="page-title">Session Details</h1>
+            <a href="{{ route('instructor.private-sessions.index') }}" class="btn btn-back">
+                <i class="fas fa-arrow-left me-2"></i> Back to Sessions
+            </a>
+        </div>
+    
+        <div class="session-card">
+            <div class="session-card-body">
+                <div class="row g-4">
+                    <!-- Session Image Column -->
+                    <div class="col-lg-4">
+                        <div class="session-image-container">
+                            @if($privateSession->img)
+                                <img src="{{ asset('storage/private_sessions/'.$privateSession->img) }}" 
+                                     class="session-image" alt="{{ $privateSession->title }}">
+                            @else
+                                <div class="session-image-placeholder">
+                                    <i class="fas fa-image"></i>
+                                    <span>No Image Available</span>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     
-                    <div class="session-description">
-                        <h5>Description</h5>
-                        <p>{{ $privateSession->description ?? 'No description provided' }}</p>
-                    </div>
-                    
-                    <div class="session-actions">
-                        <a href="{{ route('instructor.private-sessions.edit', $privateSession->id) }}" 
-                           class="btn btn-edit">
-                            <i class="fas fa-edit me-2"></i> Edit Session
-                        </a>
-                        <form action="{{ route('instructor.private-sessions.destroy', $privateSession->id) }}" 
-                              method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-delete" 
-                                    onclick="return confirm('Are you sure you want to delete this session?')">
-                                <i class="fas fa-trash me-2"></i> Delete
-                            </button>
-                        </form>
+                    <!-- Session Details Column -->
+                    <div class="col-lg-8">
+                        <div class="session-header">
+                            <h2 class="session-title">{{ $privateSession->title }}</h2>
+                            <div class="session-meta">
+                                <div class="meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>{{ $privateSession->duration }} Hours</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <span>JOD{{ number_format($privateSession->price, 2) }}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="fas {{ $privateSession->is_online ? 'fa-laptop' : 'fa-map-marker-alt' }}"></i>
+                                    <span>{{ $privateSession->is_online ? 'Online Session' : 'In-Person Session' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="session-description">
+                            <h5>Description</h5>
+                            <p>{{ $privateSession->description ?? 'No description provided' }}</p>
+                        </div>
+{{--                         
+                        <div class="session-actions">
+                            <a href="{{ route('instructor.private-sessions.edit', $privateSession->id) }}" 
+                               class="btn btn-edit">
+                                <i class="fas fa-edit me-2"></i> Edit Session
+                            </a>
+                            <form action="{{ route('instructor.private-sessions.destroy', $privateSession->id) }}" 
+                                  method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-delete" 
+                                        onclick="return confirm('Are you sure you want to delete this session?')">
+                                    <i class="fas fa-trash me-2"></i> Delete
+                                </button>
+                            </form>
+                        </div> --}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('styles')

@@ -19,10 +19,11 @@ class ReviewController extends Controller
                     }])
                     ->get();
         
-        $reviews = Review::whereIn('course_id', $courses->pluck('id'))
+                    $reviews = Review::whereIn('course_id', $courses->pluck('id'))
                     ->with(['user', 'course'])
                     ->latest()
                     ->get();
+    
     
         $courseIds = $courses->pluck('id');
         $totalReviews = Review::whereIn('course_id', $courseIds)->count();

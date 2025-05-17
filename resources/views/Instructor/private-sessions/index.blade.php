@@ -282,7 +282,7 @@
                     <th>Title</th>
                     <th>Duration</th>
                     <th>Price</th>
-                    <th>Status</th>
+                    <th>Description</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -291,13 +291,10 @@
                 <tr>
                     <td data-label="#">{{ $loop->iteration }}</td>
                     <td data-label="Title" class="session-title">{{ $session->title }}</td>
+                    <td data-label="Title" class="session-title">{{ $session->description }}</td>
                     <td data-label="Duration">{{ $session->duration }} mins</td>
                     <td data-label="Price" class="price-cell">JOD{{ number_format($session->price, 2) }}</td>
-                    <td data-label="Status">
-                        <span class="badge {{ $session->is_active ? 'bg-success' : 'bg-secondary' }}">
-                            {{ $session->is_active ? 'Active' : 'Inactive' }}
-                        </span>
-                    </td>
+                 
                     <td data-label="Actions">
                         <div class="action-btns">
                             <a href="{{ route('instructor.private-sessions.show', $session->id) }}" 

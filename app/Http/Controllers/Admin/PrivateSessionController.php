@@ -30,12 +30,17 @@ class PrivateSessionController extends Controller
             'duration' => 'required|integer',
             'status' => 'required|in:pending,approved,completed,canceled',
             'description' => 'nullable|string',
+            'is_online' => 'nullable|boolean',
         ]);
-
-        PrivateSession::create($request->all());
+    
+        $data = $request->all();
+        $data['is_online'] = $request->has('is_online');
+    
+        PrivateSession::create($data);
+    
         return redirect()->route('admin.private_sessions.index')->with('success', 'Private session created successfully');
     }
-
+    
     public function edit($id)
     {
         $session = PrivateSession::findOrFail($id);
@@ -51,10 +56,15 @@ class PrivateSessionController extends Controller
             'duration' => 'required|integer',
             'status' => 'required|in:pending,approved,completed,canceled',
             'description' => 'nullable|string',
+            'is_online' => 'nullable|boolean',
         ]);
-
+    
         $session = PrivateSession::findOrFail($id);
-        $session->update($request->all());
+        $data = $request->all();
+        $data['is_online'] = $request->has('is_online');
+    
+        $session->update($data);
+    
         return redirect()->route('admin.private_sessions.index')->with('success', 'Private session updated successfully');
     }
 

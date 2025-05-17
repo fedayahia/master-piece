@@ -59,6 +59,10 @@
                         <div class="d-flex justify-content-between px-4 py-2 bg-primary rounded-bottom">
                             {{-- <small class="text-white"><i class="fas fa-calendar-alt me-1"></i> {{ \Carbon\Carbon::parse($session->session_date)->format('l, F j, Y') }}</small> --}}
                             <small class="text-white"><i class="fas fa-clock me-1"></i> Duration: {{ $session->duration }} mins</small>
+                            <small class="text-white">
+                                <i class="fas {{ $session->is_online ? 'fa-wifi' : 'fa-building' }} me-1"></i>
+                                {{ $session->is_online ? 'Online' : 'Offline' }}
+                            </small>
                         </div>
                     </div>
                 </div>

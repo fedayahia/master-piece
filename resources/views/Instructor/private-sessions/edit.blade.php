@@ -46,7 +46,25 @@
                         @enderror
                     </div>
                 </div>
-
+<!-- Online Status Toggle -->
+<div class="form-group">
+    <label>Session Type*</label>
+    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+        <label class="btn btn-outline-primary {{ old('is_online', $privateSession->is_online) ? 'active' : '' }}">
+            <input type="radio" name="is_online" value="1" 
+                   {{ old('is_online', $privateSession->is_online) ? 'checked' : '' }}> 
+            <i class="fas fa-laptop me-2"></i> Online Session
+        </label>
+        <label class="btn btn-outline-primary {{ !old('is_online', $privateSession->is_online) ? 'active' : '' }}">
+            <input type="radio" name="is_online" value="0" 
+                   {{ !old('is_online', $privateSession->is_online) ? 'checked' : '' }}>
+            <i class="fas fa-map-marker-alt me-2"></i> In-Person Session
+        </label>
+    </div>
+    @error('is_online')
+        <div class="invalid-feedback d-block">{{ $message }}</div>
+    @enderror
+</div>
                 <div class="form-group">
                     <label for="description">Description*</label>
                     <textarea class="form-control @error('description') is-invalid @enderror" 
@@ -104,7 +122,27 @@
 
 @push('styles')
 <style>
- 
+  .btn-group-toggle .btn {
+        flex: 1;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem;
+    }
+
+    .btn-group-toggle .btn.active {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+
+    /* .btn-group-toggle .btn:not(.active) {
+        background-color: white;
+    } */
+
+    .btn-group-toggle .btn i {
+        margin-right: 0.5rem;
+    }
 
     .container {
         max-width: 900px;

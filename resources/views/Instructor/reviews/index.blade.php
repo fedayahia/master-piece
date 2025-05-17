@@ -337,7 +337,7 @@
                         <tr>
                             <td data-label="Student">
                                 <div class="user-info-compact">
-                                    <img src="{{ asset('storage/'.$review->user->image) }}" class="user-avatar-sm" alt="{{ $review->user->name }}">
+                                    <img src="{{ asset('storage/profile_images/'.$review->user->image) }}" class="user-avatar-sm" alt="{{ $review->user->name }}">
                                     <span>{{ $review->user->name }}</span>
                                 </div>
                             </td>
@@ -415,7 +415,8 @@
                             <tr>
                                 <td data-label="Student">
                                     <div class="user-info-compact">
-                                        <img src="{{ asset('storage/'.$review->user->image) }}" class="user-avatar-sm" alt="{{ $review->user->name }}">
+                                        <img src="{{ asset('storage/profile_images/' . $review->user->image) }}" class="user-avatar-sm" alt="{{ $review->user->name }}">
+                                        
                                         <span>{{ $review->user->name }}</span>
                                     </div>
                                 </td>

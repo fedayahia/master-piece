@@ -22,8 +22,10 @@
                         <div class="footer-item text-center">
                             <h4 class="text-primary mb-4 border-bottom border-primary border-2 d-inline-block p-2 title-border-radius">LOCATION</h4>
                             <div class="d-flex flex-column align-items-center">
-                                <a href="" class="text-body mb-4"><i class="fa fa-map-marker-alt text-primary me-2"></i> 104 North tower New York, USA</a>
-                                <a href="" class="text-start rounded-0 text-body mb-4"><i class="fa fa-phone-alt text-primary me-2"></i> (+012) 3456 7890 123</a>
+                                <a href="" class="text-body mb-4">
+                                    <i class="fa fa-map-marker-alt text-primary me-2"></i> Al-Dakhiliyah Circle, Amman, Jordan
+                                </a>
+                                                                <a href="" class="text-start rounded-0 text-body mb-4"><i class="fa fa-phone-alt text-primary me-2"></i> (+012) 3456 7890 123</a>
                                 <a href="" class="text-start rounded-0 text-body mb-4"><i class="fas fa-envelope text-primary me-2"></i>fedayahia251@gmail.com</a>
                                 <a href="" class="text-start rounded-0 text-body mb-4"><i class="fa fa-clock text-primary me-2"></i>48 Hours / Week Service</a>
                                 <div class="footer-icon d-flex justify-content-center">
